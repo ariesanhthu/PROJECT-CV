@@ -1,0 +1,15 @@
+# LaTeX build outputs (all directories)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.synctex.gz
+*.toc
+
+# Output PDF
+main.pdf

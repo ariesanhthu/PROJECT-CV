@@ -1,0 +1,134 @@
+\section{Transformer-Based Semantic Segmentation}
+
+\subsection{Principle and Methodology}
+
+Transformer architecture was originally proposed for sequence modeling in natural language processing and later adapted to computer vision tasks \cite{vaswani2017attention}. 
+The key component of a transformer is the self-attention mechanism, which enables the model to capture long-range dependencies between input elements.
+
+Given an input feature sequence $X \in \mathbb{R}^{N \times d}$, the attention mechanism computes the relationship between tokens using query ($Q$), key ($K$), and value ($V$) matrices:
+
+\begin{equation}
+Q = XW_Q,\quad K = XW_K,\quad V = XW_V
+\end{equation}
+
+The scaled dot-product attention is defined as:
+
+\begin{equation}
+Attention(Q,K,V) = softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+\end{equation}
+
+where $d_k$ represents the dimension of the key vectors used for normalization. 
+This mechanism allows each token to attend to all other tokens in the sequence, enabling the model to capture global contextual information \cite{vaswani2017attention}.
+
+In computer vision, images are first divided into patches before being processed by the transformer architecture. 
+The \textit{Vision Transformer (ViT)} treats image patches as tokens and feeds them into a transformer encoder to model global relationships between patches \cite{dosovitskiy2020image}.
+
+For semantic segmentation tasks, transformer-based architectures typically follow a three-stage pipeline:
+
+\begin{enumerate}
+\item \textbf{Patch Embedding}
+
+An input image $I \in \mathbb{R}^{H \times W \times C}$ is divided into non-overlapping patches of size $P \times P$. 
+Each patch is flattened and projected into an embedding vector.
+
+\item \textbf{Transformer Encoder}
+
+The sequence of patch embeddings is processed by a transformer encoder consisting of multi-head self-attention layers and feed-forward networks. 
+These layers model global dependencies across image regions.
+
+\item \textbf{Segmentation Decoder}
+
+A decoder module reconstructs pixel-level predictions from the encoded features. 
+This stage usually includes upsampling layers or multi-scale feature fusion to produce the final segmentation map.
+\end{enumerate}
+
+Several transformer-based segmentation models have been proposed, including Vision Transformer (ViT), Swin Transformer, Segmenter, and SegFormer \cite{dosovitskiy2020image,liu2021swin,xie2021segformer,strudel2021segmenter}. 
+These models demonstrate strong performance in dense prediction tasks due to their ability to capture global context.
+
+\subsection{Datasets for Transformer-Based Segmentation}
+
+Transformer-based segmentation models are commonly evaluated using large-scale annotated datasets. 
+These datasets provide pixel-level annotations required for training and benchmarking segmentation models.
+
+\textbf{Cityscapes}
+
+The Cityscapes dataset is designed for urban scene understanding in autonomous driving applications \cite{cordts2016cityscapes}. 
+It contains 5000 finely annotated images and 20000 coarsely labeled images with a resolution of $1024 \times 2048$. 
+The dataset includes 19 semantic classes such as roads, vehicles, pedestrians, and traffic signs.
+
+A key challenge in Cityscapes is the presence of small objects and complex boundaries, which require models to capture both local details and global context.
+
+\textbf{ADE20K}
+
+The ADE20K dataset is widely used for scene parsing and contains more than 25,000 images with annotations for 150 semantic classes \cite{zhou2017scene}. 
+The dataset includes a diverse set of indoor and outdoor scenes, making it suitable for evaluating the generalization ability of segmentation models.
+
+Transformer-based architectures perform well on ADE20K because the attention mechanism helps model relationships between multiple objects within complex scenes.
+
+\textbf{PASCAL VOC 2012}
+
+PASCAL VOC is a benchmark dataset commonly used in semantic segmentation research \cite{everingham2010pascal}. 
+It includes approximately 20 object classes with pixel-level annotations.
+
+Although smaller than other datasets, it is widely used for benchmarking segmentation algorithms.
+
+\subsection{Evaluation Metrics}
+
+To evaluate the performance of segmentation models, several pixel-level metrics are used.
+
+\textbf{Pixel Accuracy (PA)}
+
+Pixel accuracy measures the ratio of correctly predicted pixels to the total number of pixels:
+
+\begin{equation}
+PA = \frac{\sum_i n_{ii}}{\sum_i t_i}
+\end{equation}
+
+where $n_{ii}$ represents correctly classified pixels for class $i$, and $t_i$ represents the total number of pixels belonging to class $i$.
+
+\textbf{Intersection over Union (IoU)}
+
+Intersection over Union measures the overlap between the predicted segmentation and the ground truth:
+
+\begin{equation}
+IoU = \frac{TP}{TP + FP + FN}
+\end{equation}
+
+where $TP$ denotes true positives, $FP$ denotes false positives, and $FN$ denotes false negatives.
+
+\textbf{Mean Intersection over Union (mIoU)}
+
+Mean IoU is the average IoU across all classes:
+
+\begin{equation}
+mIoU = \frac{1}{K}\sum_{k=1}^{K} IoU_k
+\end{equation}
+
+where $K$ is the number of classes. 
+This metric is considered the standard evaluation metric in most segmentation benchmarks.
+
+\subsection{Research Gap}
+
+Despite the success of transformer-based segmentation models, several limitations remain.
+
+\begin{itemize}
+
+\item \textbf{Computational Complexity}
+
+Self-attention has quadratic complexity with respect to the number of tokens, which leads to high computational cost when processing high-resolution images.
+
+\item \textbf{Large Data Requirement}
+
+Transformer models typically require large-scale datasets to achieve optimal performance because they lack the inductive biases present in convolutional neural networks.
+
+\item \textbf{Boundary Precision}
+
+Although transformers capture global context effectively, they sometimes struggle to preserve fine spatial details, leading to inaccurate segmentation boundaries.
+
+\item \textbf{Memory Consumption}
+
+Large transformer models require significant GPU memory, which can limit their deployment in real-time applications or resource-constrained environments.
+
+\end{itemize}
+
+Future research directions include developing lightweight transformer architectures, improving data efficiency, and combining convolutional inductive biases with transformer attention mechanisms \cite{xie2021segformer,liu2021swin}.
