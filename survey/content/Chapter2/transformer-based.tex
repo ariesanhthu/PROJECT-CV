@@ -1,134 +1,139 @@
-\section{Transformer-Based Semantic Segmentation}
+\section{Phân đoạn ngữ nghĩa dựa trên Transformer}
 
-\subsection{Principle and Methodology}
+\subsection{Nguyên lý và phương pháp}
 
-Transformer architecture was originally proposed for sequence modeling in natural language processing and later adapted to computer vision tasks \cite{vaswani2017attention}. 
-The key component of a transformer is the self-attention mechanism, which enables the model to capture long-range dependencies between input elements.
+Kiến trúc Transformer ban đầu được đề xuất cho các bài toán mô hình hóa chuỗi trong xử lý ngôn ngữ tự nhiên và sau đó được mở rộng sang các bài toán thị giác máy tính \cite{vaswani2017attention}. 
+Thành phần cốt lõi của Transformer là cơ chế \textit{self-attention}, cho phép mô hình học được các mối quan hệ phụ thuộc dài hạn giữa các phần tử trong dữ liệu đầu vào.
 
-Given an input feature sequence $X \in \mathbb{R}^{N \times d}$, the attention mechanism computes the relationship between tokens using query ($Q$), key ($K$), and value ($V$) matrices:
+Cho một chuỗi đặc trưng đầu vào $X \in \mathbb{R}^{N \times d}$, cơ chế attention xây dựng mối quan hệ giữa các token thông qua ba phép biến đổi tuyến tính: truy vấn (query), khóa (key) và giá trị (value):
 
 \begin{equation}
 Q = XW_Q,\quad K = XW_K,\quad V = XW_V
 \end{equation}
 
-The scaled dot-product attention is defined as:
+Trong đó $W_Q$, $W_K$ và $W_V$ là các ma trận trọng số được học trong quá trình huấn luyện.
+
+Cơ chế \textit{scaled dot-product attention} được định nghĩa như sau:
 
 \begin{equation}
 Attention(Q,K,V) = softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V
 \end{equation}
 
-where $d_k$ represents the dimension of the key vectors used for normalization. 
-This mechanism allows each token to attend to all other tokens in the sequence, enabling the model to capture global contextual information \cite{vaswani2017attention}.
+Trong đó $d_k$ là số chiều của vector key và được sử dụng để chuẩn hóa nhằm ổn định quá trình huấn luyện. 
+Cơ chế này cho phép mỗi token có thể tương tác với toàn bộ các token còn lại trong chuỗi đầu vào, từ đó mô hình có khả năng khai thác thông tin ngữ cảnh toàn cục \cite{vaswani2017attention}.
 
-In computer vision, images are first divided into patches before being processed by the transformer architecture. 
-The \textit{Vision Transformer (ViT)} treats image patches as tokens and feeds them into a transformer encoder to model global relationships between patches \cite{dosovitskiy2020image}.
+Trong thị giác máy tính, ảnh đầu vào trước hết được chia thành các khối nhỏ (patch). 
+Mô hình \textit{Vision Transformer (ViT)} xem mỗi patch như một token trong chuỗi và đưa chúng vào bộ mã hóa Transformer để học các quan hệ toàn cục giữa các vùng ảnh \cite{dosovitskiy2020image}.
 
-For semantic segmentation tasks, transformer-based architectures typically follow a three-stage pipeline:
+Đối với bài toán phân đoạn ngữ nghĩa, các kiến trúc dựa trên Transformer thường tuân theo quy trình gồm ba giai đoạn chính:
 
 \begin{enumerate}
+
 \item \textbf{Patch Embedding}
 
-An input image $I \in \mathbb{R}^{H \times W \times C}$ is divided into non-overlapping patches of size $P \times P$. 
-Each patch is flattened and projected into an embedding vector.
+Ảnh đầu vào $I \in \mathbb{R}^{H \times W \times C}$ được chia thành các patch không chồng lấp có kích thước $P \times P$. 
+Mỗi patch sau đó được làm phẳng (flatten) và ánh xạ vào một vector đặc trưng trong không gian embedding.
 
 \item \textbf{Transformer Encoder}
 
-The sequence of patch embeddings is processed by a transformer encoder consisting of multi-head self-attention layers and feed-forward networks. 
-These layers model global dependencies across image regions.
+Chuỗi các vector embedding được đưa vào bộ mã hóa Transformer, bao gồm nhiều lớp \textit{multi-head self-attention} và các mạng \textit{feed-forward}. 
+Các lớp này cho phép mô hình học được các quan hệ phụ thuộc dài hạn giữa các vùng ảnh, từ đó khai thác hiệu quả thông tin ngữ cảnh toàn cục.
 
 \item \textbf{Segmentation Decoder}
 
-A decoder module reconstructs pixel-level predictions from the encoded features. 
-This stage usually includes upsampling layers or multi-scale feature fusion to produce the final segmentation map.
+Bộ giải mã (decoder) có nhiệm vụ tái tạo dự đoán ở mức pixel từ các đặc trưng đã được mã hóa. 
+Giai đoạn này thường bao gồm các phép nội suy (upsampling) hoặc các cơ chế kết hợp đặc trưng đa tỉ lệ để tạo ra bản đồ phân đoạn cuối cùng.
+
 \end{enumerate}
 
-Several transformer-based segmentation models have been proposed, including Vision Transformer (ViT), Swin Transformer, Segmenter, and SegFormer \cite{dosovitskiy2020image,liu2021swin,xie2021segformer,strudel2021segmenter}. 
-These models demonstrate strong performance in dense prediction tasks due to their ability to capture global context.
+Nhiều kiến trúc phân đoạn ngữ nghĩa dựa trên Transformer đã được đề xuất, tiêu biểu như Vision Transformer (ViT), Swin Transformer, Segmenter và SegFormer \cite{dosovitskiy2020image,liu2021swin,xie2021segformer,strudel2021segmenter}. 
+Các mô hình này cho thấy hiệu năng cao trong các bài toán dự đoán dày đặc (dense prediction) nhờ khả năng mô hình hóa quan hệ ngữ cảnh toàn cục.
 
-\subsection{Datasets for Transformer-Based Segmentation}
+\subsection{Tập dữ liệu cho phân đoạn ngữ nghĩa dựa trên Transformer}
 
-Transformer-based segmentation models are commonly evaluated using large-scale annotated datasets. 
-These datasets provide pixel-level annotations required for training and benchmarking segmentation models.
+Các mô hình phân đoạn ngữ nghĩa thường được đánh giá trên các tập dữ liệu có gán nhãn ở mức pixel. 
+Những tập dữ liệu này đóng vai trò quan trọng trong việc huấn luyện và so sánh hiệu năng giữa các mô hình.
 
 \textbf{Cityscapes}
 
-The Cityscapes dataset is designed for urban scene understanding in autonomous driving applications \cite{cordts2016cityscapes}. 
-It contains 5000 finely annotated images and 20000 coarsely labeled images with a resolution of $1024 \times 2048$. 
-The dataset includes 19 semantic classes such as roads, vehicles, pedestrians, and traffic signs.
+Tập dữ liệu Cityscapes được xây dựng nhằm phục vụ bài toán hiểu cảnh đô thị trong các hệ thống xe tự hành \cite{cordts2016cityscapes}. 
+Tập dữ liệu bao gồm khoảng 5000 ảnh được gán nhãn chi tiết và 20000 ảnh được gán nhãn thô, với độ phân giải $1024 \times 2048$.
 
-A key challenge in Cityscapes is the presence of small objects and complex boundaries, which require models to capture both local details and global context.
+Cityscapes bao gồm 19 lớp ngữ nghĩa khác nhau, chẳng hạn như đường, phương tiện giao thông, người đi bộ và biển báo giao thông. 
+Một thách thức quan trọng của tập dữ liệu này là sự tồn tại của các đối tượng nhỏ và các biên phân đoạn phức tạp, đòi hỏi mô hình phải đồng thời khai thác được cả thông tin cục bộ và ngữ cảnh toàn cục.
 
 \textbf{ADE20K}
 
-The ADE20K dataset is widely used for scene parsing and contains more than 25,000 images with annotations for 150 semantic classes \cite{zhou2017scene}. 
-The dataset includes a diverse set of indoor and outdoor scenes, making it suitable for evaluating the generalization ability of segmentation models.
+ADE20K là một tập dữ liệu phổ biến trong bài toán phân tích cảnh (scene parsing), bao gồm hơn 25.000 ảnh với 150 lớp ngữ nghĩa \cite{zhou2017scene}. 
+Tập dữ liệu này chứa nhiều loại cảnh khác nhau, bao gồm cả môi trường trong nhà và ngoài trời, do đó thường được sử dụng để đánh giá khả năng tổng quát hóa của các mô hình phân đoạn.
 
-Transformer-based architectures perform well on ADE20K because the attention mechanism helps model relationships between multiple objects within complex scenes.
+Các kiến trúc dựa trên Transformer thường đạt hiệu năng tốt trên ADE20K do cơ chế attention cho phép mô hình học được các mối quan hệ phức tạp giữa nhiều đối tượng trong cùng một cảnh.
 
 \textbf{PASCAL VOC 2012}
 
-PASCAL VOC is a benchmark dataset commonly used in semantic segmentation research \cite{everingham2010pascal}. 
-It includes approximately 20 object classes with pixel-level annotations.
+PASCAL VOC là một tập dữ liệu chuẩn được sử dụng rộng rãi trong nghiên cứu thị giác máy tính \cite{everingham2010pascal}. 
+Tập dữ liệu này bao gồm khoảng 20 lớp đối tượng với gán nhãn ở mức pixel.
 
-Although smaller than other datasets, it is widely used for benchmarking segmentation algorithms.
+Mặc dù quy mô nhỏ hơn so với các tập dữ liệu hiện đại, PASCAL VOC vẫn được sử dụng phổ biến để đánh giá và so sánh các thuật toán phân đoạn ngữ nghĩa.
 
-\subsection{Evaluation Metrics}
+\subsection{Các thước đo đánh giá}
 
-To evaluate the performance of segmentation models, several pixel-level metrics are used.
+Để đánh giá hiệu năng của các mô hình phân đoạn ngữ nghĩa, nhiều thước đo dựa trên mức pixel được sử dụng.
 
 \textbf{Pixel Accuracy (PA)}
 
-Pixel accuracy measures the ratio of correctly predicted pixels to the total number of pixels:
+Pixel Accuracy đo tỷ lệ số pixel được phân loại đúng trên tổng số pixel của ảnh:
 
 \begin{equation}
 PA = \frac{\sum_i n_{ii}}{\sum_i t_i}
 \end{equation}
 
-where $n_{ii}$ represents correctly classified pixels for class $i$, and $t_i$ represents the total number of pixels belonging to class $i$.
+Trong đó $n_{ii}$ là số pixel của lớp $i$ được dự đoán đúng và $t_i$ là tổng số pixel thuộc lớp $i$.
 
 \textbf{Intersection over Union (IoU)}
 
-Intersection over Union measures the overlap between the predicted segmentation and the ground truth:
+Intersection over Union đo mức độ chồng lấp giữa kết quả dự đoán và nhãn chuẩn:
 
 \begin{equation}
 IoU = \frac{TP}{TP + FP + FN}
 \end{equation}
 
-where $TP$ denotes true positives, $FP$ denotes false positives, and $FN$ denotes false negatives.
+Trong đó $TP$ là số dự đoán đúng, $FP$ là số dự đoán sai dương và $FN$ là số mẫu bị bỏ sót.
 
 \textbf{Mean Intersection over Union (mIoU)}
 
-Mean IoU is the average IoU across all classes:
+Mean IoU là giá trị trung bình của IoU trên tất cả các lớp:
 
 \begin{equation}
 mIoU = \frac{1}{K}\sum_{k=1}^{K} IoU_k
 \end{equation}
 
-where $K$ is the number of classes. 
-This metric is considered the standard evaluation metric in most segmentation benchmarks.
+Trong đó $K$ là số lớp ngữ nghĩa. 
+mIoU được xem là thước đo tiêu chuẩn trong hầu hết các benchmark về phân đoạn ngữ nghĩa.
 
-\subsection{Research Gap}
+\subsection{Khoảng trống nghiên cứu}
 
-Despite the success of transformer-based segmentation models, several limitations remain.
+Mặc dù các mô hình phân đoạn dựa trên Transformer đạt được nhiều thành tựu đáng kể, vẫn tồn tại một số hạn chế cần được giải quyết.
 
 \begin{itemize}
 
-\item \textbf{Computational Complexity}
+\item \textbf{Độ phức tạp tính toán}
 
-Self-attention has quadratic complexity with respect to the number of tokens, which leads to high computational cost when processing high-resolution images.
+Cơ chế self-attention có độ phức tạp bậc hai theo số lượng token đầu vào. 
+Điều này dẫn đến chi phí tính toán cao khi xử lý các ảnh có độ phân giải lớn.
 
-\item \textbf{Large Data Requirement}
+\item \textbf{Yêu cầu dữ liệu lớn}
 
-Transformer models typically require large-scale datasets to achieve optimal performance because they lack the inductive biases present in convolutional neural networks.
+Các mô hình Transformer thường cần lượng dữ liệu huấn luyện lớn để đạt hiệu năng tối ưu do thiếu các \textit{inductive bias} vốn có trong mạng nơ-ron tích chập.
 
-\item \textbf{Boundary Precision}
+\item \textbf{Độ chính xác biên phân đoạn}
 
-Although transformers capture global context effectively, they sometimes struggle to preserve fine spatial details, leading to inaccurate segmentation boundaries.
+Mặc dù Transformer có khả năng mô hình hóa ngữ cảnh toàn cục hiệu quả, chúng đôi khi gặp khó khăn trong việc bảo toàn các chi tiết không gian tinh vi, dẫn đến sai lệch tại các vùng biên đối tượng.
 
-\item \textbf{Memory Consumption}
+\item \textbf{Tiêu thụ bộ nhớ}
 
-Large transformer models require significant GPU memory, which can limit their deployment in real-time applications or resource-constrained environments.
+Các mô hình Transformer lớn yêu cầu dung lượng bộ nhớ GPU đáng kể, điều này hạn chế khả năng triển khai trong các hệ thống thời gian thực hoặc các môi trường có tài nguyên tính toán hạn chế.
 
 \end{itemize}
 
-Future research directions include developing lightweight transformer architectures, improving data efficiency, and combining convolutional inductive biases with transformer attention mechanisms \cite{xie2021segformer,liu2021swin}.
+Các hướng nghiên cứu trong tương lai bao gồm việc phát triển các kiến trúc Transformer nhẹ hơn, cải thiện hiệu quả sử dụng dữ liệu, cũng như kết hợp các đặc tính quy nạp của mạng tích chập với cơ chế attention của Transformer \cite{xie2021segformer,liu2021swin}.
