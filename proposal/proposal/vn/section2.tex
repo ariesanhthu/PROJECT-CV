@@ -1,0 +1,52 @@
+\section{Bối cảnh và vấn đề nghiên cứu}
+\label{introduction}
+
+\subsection{Bối cảnh nghiên cứu}
+
+Phân đoạn ngữ nghĩa (semantic segmentation) là một bài toán quan trọng trong lĩnh vực thị giác máy tính, trong đó mục tiêu là phân lớp cho từng pixel trong ảnh.
+
+Tác vụ này được ứng dụng rộng rãi trong thực tế như xe tự lái, theo dõi đối tượng, phân tích hình ảnh thực phẩm.
+
+Khảo sát sẽ tập trung tìm hiểu các phương pháp tiếp cận của bài toán này trong ứng dụng phân đoạn ngữ nghĩa thực phẩm, đặc biệt là các mô hình nhẹ triển khai ở các thiết bị biên nhằm hỗ trợ các hệ thống công nghiệp theo dõi, đánh giá thực phẩm tự động, tiết kiệm chi phí vận hành.
+
+Tập dữ liệu \textbf{FoodSeg103} được xây dựng để hỗ trợ nghiên cứu phân đoạn thực phẩm ở mức pixel với \textbf{103 loại nguyên liệu khác nhau}. Tuy nhiên, bài toán này khá khó vì hình ảnh thực phẩm có đặc trưng thị giác phức tạp:
+\begin{itemize}
+    \item Các nguyên liệu thường chồng lấp lên nhau;
+    \item Một nguyên liệu có thể có nhiều hình thái khác nhau;
+    \item Hai nguyên liệu khác nhau đôi khi có hình dạng rất giống nhau.
+\end{itemize}
+
+Các mô hình phân đoạn hiện đại như \textbf{DeepLabV3} đạt độ chính xác cao nhờ sử dụng các kỹ thuật như atrous convolution và mô-đun ASPP để khai thác thông tin đa tỉ lệ. Tuy nhiên, các mô hình này thường sử dụng backbone nặng (như ResNet), dẫn đến chi phí tính toán lớn và khó triển khai trên thiết bị di động. Do đó, việc nghiên cứu các backbone lightweight nhằm giảm chi phí tính toán trong khi vẫn giữ được độ chính xác là một hướng nghiên cứu quan trọng.
+
+\subsection{Vấn đề nghiên cứu}
+
+Mặc dù DeepLabV3 đạt hiệu năng tốt trong nhiều bài toán phân đoạn ngữ nghĩa, mô hình này thường sử dụng các backbone lớn, khiến thời gian suy luận và kích thước mô hình khá cao. Điều này gây khó khăn khi triển khai trên các thiết bị có tài nguyên hạn chế như điện thoại thông minh hoặc thiết bị nhúng.
+
+Cần nghiên cứu xem liệu việc thay thế backbone của DeepLabV3 bằng các kiến trúc nhẹ hơn (như MobileNet) có thể cải thiện tốc độ suy luận mà vẫn giữ được độ chính xác chấp nhận được hay không. Ngoài ra, việc thay đổi độ phân giải đầu vào của ảnh cũng có thể ảnh hưởng đến sự cân bằng giữa tốc độ và độ chính xác của mô hình, đặc biệt khi triển khai trên thiết bị di động.
+
+\subsection{Câu hỏi nghiên cứu}
+
+\textbf{Câu hỏi chính:} Liệu các backbone lightweight có thể cải thiện tốc độ suy luận của DeepLabV3 trong khi vẫn duy trì hiệu năng phân đoạn chấp nhận được trên tập dữ liệu FoodSeg103 hay không?
+
+\textbf{Câu hỏi phụ:}
+\begin{enumerate}
+    \item Việc thay thế backbone của DeepLabV3 bằng MobileNetV2 hoặc MobileNetV3 ảnh hưởng như thế nào đến độ chính xác của mô hình?
+    \item Sự đánh đổi giữa tốc độ suy luận và độ chính xác khi sử dụng các backbone lightweight là như thế nào?
+    \item Backbone nào phù hợp nhất cho việc triển khai DeepLabV3 trên thiết bị di động?
+\end{enumerate}
+
+\subsection{Mục tiêu nghiên cứu}
+
+\begin{enumerate}
+    \item Triển khai mô hình \textbf{DeepLabV3 baseline} cho bài toán phân đoạn ngữ nghĩa trên tập dữ liệu FoodSeg103.
+    \item Thay thế backbone của DeepLabV3 bằng các kiến trúc lightweight như \textbf{MobileNetV2} và \textbf{MobileNetV3}.
+    \item Thực nghiệm và so sánh hiệu năng của các mô hình theo các tiêu chí độ chính xác và tốc độ suy luận.
+    \item Phân tích ảnh hưởng của độ phân giải đầu vào đến hiệu năng của mô hình.
+    \item Đề xuất cấu hình mô hình phù hợp cho việc triển khai trên thiết bị di động.
+\end{enumerate}
+
+\subsection{Tổng quan nghiên cứu liên quan}
+
+Trong lĩnh vực phân đoạn ngữ nghĩa, nhiều kiến trúc mạng nơ-ron sâu đã được đề xuất như Fully Convolutional Network (FCN), U-Net và DeepLab. DeepLabV3 là một trong những mô hình nổi bật nhờ sử dụng \textbf{atrous convolution} để mở rộng receptive field và mô-đun \textbf{Atrous Spatial Pyramid Pooling (ASPP)} để khai thác thông tin ngữ cảnh đa tỉ lệ.
+
+Tuy nhiên, các backbone thường dùng trong DeepLabV3 như ResNet có chi phí tính toán cao. Các nghiên cứu gần đây đã đề xuất sử dụng các kiến trúc lightweight như MobileNet để giảm chi phí tính toán mà vẫn duy trì hiệu năng tốt. MobileNetV2 và MobileNetV3 được thiết kế đặc biệt cho các thiết bị di động, sử dụng các kỹ thuật như \textbf{depthwise separable convolution} và \textbf{inverted residual block} nhằm giảm số lượng tham số và tăng tốc độ suy luận.
