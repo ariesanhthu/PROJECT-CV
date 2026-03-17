@@ -2362,6 +2362,20 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">references/chapter-2.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
+    <bcf:citekey order="1" intorder="1">godfray2010foodsecurity</bcf:citekey>
+    <bcf:citekey order="1" intorder="2">alexandratos1995world</bcf:citekey>
+    <bcf:citekey order="2" intorder="1">mahalik2010trends</bcf:citekey>
+    <bcf:citekey order="2" intorder="2">stemmer2018vision</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">gao2019smartfridge</bcf:citekey>
+    <bcf:citekey order="3" intorder="2">wang2019smartrefrigerator</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">zhuang2020transfer</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">he2015residual</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">dong2020mobilenetv2</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">he2015residual</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">dong2020mobilenetv2</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">yanai2015foodimage</bcf:citekey>
+    <bcf:citekey order="9" intorder="2">lubura2022foodrecognition</bcf:citekey>
+    <bcf:citekey order="9" intorder="3">chakraborty2024aikitchen</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nyt">
