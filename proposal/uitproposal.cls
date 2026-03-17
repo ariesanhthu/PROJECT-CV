@@ -92,7 +92,7 @@
         \vfill
         {\large{\centering{\textbf{Giảng viên hướng dẫn} \\ \@supervisorname}}} \\
         \vspace{3cm}
-        {\large{\centering{\textbf{Học viên thực hiện} \\ \@studentname}}}
+        {\large{\centering{\textbf{Sinh viên thực hiện} \\ \@studentname}}}
         \vfill
         \today
     \end{center}
