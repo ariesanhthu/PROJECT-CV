@@ -3,11 +3,11 @@
 
 \subsection{Bối cảnh nghiên cứu}
 
-Phân đoạn ngữ nghĩa (semantic segmentation) là một bài toán quan trọng trong lĩnh vực thị giác máy tính, trong đó mục tiêu là phân lớp cho từng pixel trong ảnh.
+Phân đoạn ngữ nghĩa (semantic segmentation) là một bài toán quan trọng trong lĩnh vực thị giác máy tính, trong đó mục tiêu là phân lớp cho từng pixel trong ảnh. 
 
-Tác vụ này được ứng dụng rộng rãi trong thực tế như xe tự lái, theo dõi đối tượng, phân tích hình ảnh thực phẩm.
+Dân số toàn cầu dự kiến đạt 9,1 tỷ người vào năm 2050, đòi hỏi sản lượng lương thực tăng khoảng 70\% \parencite{godfray2010foodsecurity,alexandratos1995world}. Vì vậy, việc tự động hóa chuỗi cung ứng thực phẩm - từ thu hoạch, phân loại đến kiểm soát chất lượng - trở nên cần thiết \parencite{mahalik2010trends,stemmer2018vision}. Trong đó, phân vùng ngữ nghĩa giúp hệ thống robot và camera nhận diện chính xác thực phẩm, giảm sai sót trong sản xuất, đồng thời hỗ trợ các thiết bị IoT như tủ lạnh thông minh theo dõi độ tươi và dinh dưỡng theo thời gian thực \parencite{gao2019smartfridge,wang2019smartrefrigerator}.
 
-Khảo sát sẽ tập trung tìm hiểu các phương pháp tiếp cận của bài toán này trong ứng dụng phân đoạn ngữ nghĩa thực phẩm, đặc biệt là các mô hình nhẹ triển khai ở các thiết bị biên nhằm hỗ trợ các hệ thống công nghiệp theo dõi, đánh giá thực phẩm tự động, tiết kiệm chi phí vận hành.
+Từ góc độ thuật toán, hình ảnh thực phẩm có độ phức tạp cao do các đối tượng thường chồng lấp, đa dạng hình thái trong cùng nhóm và có nhiều đặc điểm tương đồng giữa các nhóm khác nhau \parencite{zhuang2020transfer}. Mặc dù các CNN sâu có khả năng trích xuất đặc trưng mạnh, việc triển khai trong hệ thống thực tế đòi hỏi cân bằng giữa độ chính xác, tốc độ xử lý và tài nguyên phần cứng \parencite{he2015residual}. Vì vậy, nghiên cứu các mô hình học sâu gọn nhẹ (lightweight models) nhằm giảm chi phí tính toán nhưng vẫn đảm bảo hiệu năng nhận diện là một hướng nghiên cứu quan trọng \parencite{dong2020mobilenetv2}.
 
 Tập dữ liệu \textbf{FoodSeg103} được xây dựng để hỗ trợ nghiên cứu phân đoạn thực phẩm ở mức pixel với \textbf{103 loại nguyên liệu khác nhau}. Tuy nhiên, bài toán này khá khó vì hình ảnh thực phẩm có đặc trưng thị giác phức tạp:
 \begin{itemize}
@@ -49,4 +49,6 @@ Cần nghiên cứu xem liệu việc thay thế backbone của DeepLabV3 bằng
 
 Trong lĩnh vực phân đoạn ngữ nghĩa, nhiều kiến trúc mạng nơ-ron sâu đã được đề xuất như Fully Convolutional Network (FCN), U-Net và DeepLab. DeepLabV3 là một trong những mô hình nổi bật nhờ sử dụng \textbf{atrous convolution} để mở rộng receptive field và mô-đun \textbf{Atrous Spatial Pyramid Pooling (ASPP)} để khai thác thông tin ngữ cảnh đa tỉ lệ.
 
-Tuy nhiên, các backbone thường dùng trong DeepLabV3 như ResNet có chi phí tính toán cao. Các nghiên cứu gần đây đã đề xuất sử dụng các kiến trúc lightweight như MobileNet để giảm chi phí tính toán mà vẫn duy trì hiệu năng tốt. MobileNetV2 và MobileNetV3 được thiết kế đặc biệt cho các thiết bị di động, sử dụng các kỹ thuật như \textbf{depthwise separable convolution} và \textbf{inverted residual block} nhằm giảm số lượng tham số và tăng tốc độ suy luận.
+Tuy nhiên, các backbone thường dùng trong DeepLabV3 như ResNet có chi phí tính toán cao \parencite{he2015residual}. Các nghiên cứu gần đây đã đề xuất sử dụng các kiến trúc lightweight như MobileNet để giảm chi phí tính toán mà vẫn duy trì hiệu năng tốt \parencite{dong2020mobilenetv2}. MobileNetV2 và MobileNetV3 được thiết kế đặc biệt cho các thiết bị di động, sử dụng các kỹ thuật như \textbf{depthwise separable convolution} và \textbf{inverted residual block} nhằm giảm số lượng tham số và tăng tốc độ suy luận.
+
+Ngoài ra, nhiều nghiên cứu ứng dụng đã chứng minh tiềm năng của học sâu trong nhận diện thực phẩm và quản lý lãng phí, từ bài toán nhận diện ảnh món ăn đến các hệ thống nhà bếp thông minh \parencite{yanai2015foodimage,lubura2022foodrecognition,chakraborty2024aikitchen}.
