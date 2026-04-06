@@ -1,6 +1,3 @@
-Đúng, lúc này **đừng sửa 10 thứ cùng lúc**.
-Việc quan trọng nhất bây giờ không phải “tối ưu thêm”, mà là:
-
 > **xác định chính xác vì sao model không học được**.
 
 Và với log bạn đã chạy, dấu hiệu là model đang **học rất yếu**: sau nhiều epoch, `mIoU` chỉ quanh vài phần trăm, `aAcc` lại quanh ~0.48–0.52, kiểu này thường là model đang học nền/lớp lớn nhiều hơn là học phân đoạn thực sự. 
