@@ -1,0 +1,67 @@
+\section{Quy trình phân tích và chỉ số chính}
+
+\subsection{Quy trình xử lý trong notebook}
+Notebook thực hiện tuần tự các bước sau:
+\begin{enumerate}[leftmargin=1.5em]
+    \item Tự động nhận diện đường dẫn dataset và đọc \texttt{meta.json}.
+    \item Quét toàn bộ ảnh ở \texttt{train/test}, kiểm tra ảnh đọc được và tồn tại annotation.
+    \item Tạo bảng chỉ mục file với trạng thái \texttt{ok}, \texttt{bad\_image}, hoặc lỗi annotation.
+    \item Tính thống kê kích thước ảnh, số đối tượng trên mỗi ảnh.
+    \item Đếm phân bố class theo số object và số ảnh chứa class.
+    \item Giải mã bitmap trong JSON để trực quan mask và overlay.
+    \item Xuất báo cáo CSV phục vụ tổng hợp.
+\end{enumerate}
+
+\subsection{Kết quả toàn vẹn dữ liệu}
+\begin{table}[H]
+    \centering
+    \caption{Tổng hợp tính toàn vẹn theo split}
+    \begin{tabular}{lrrr}
+        \toprule
+        Split & Ảnh hợp lệ (ok) & Tổng ảnh & Tỉ lệ ok \\
+        \midrule
+        Train & 3981 & 3982 & 99.9749\% \\
+        Test  & 2135 & 2135 & 100.0000\% \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Nhận xét nhanh:
+\begin{itemize}[leftmargin=1.5em]
+    \item Tập \texttt{test} sạch hoàn toàn theo kiểm tra tự động.
+    \item Tập \texttt{train} có 1 ảnh lỗi đọc, mức ảnh hưởng rất nhỏ.
+    \item Bộ dữ liệu đủ điều kiện để huấn luyện đa lớp ở mức production thử nghiệm.
+\end{itemize}
+
+\subsection{Thống kê ảnh và số object}
+\begin{table}[H]
+    \centering
+    \caption{Thống kê kích thước ảnh và object}
+    \begin{tabular}{lrrrr}
+        \toprule
+        Split & Số ảnh & Rộng TB & Cao TB & Object TB/ảnh \\
+        \midrule
+        Train & 3981 & 770.80 & 640.58 & 3.76 \\
+        Test  & 2135 & 578.80 & 480.01 & 3.61 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Diễn giải:
+\begin{itemize}[leftmargin=1.5em]
+    \item Kích thước ảnh train lớn hơn test đáng kể, cho thấy khả năng có \emph{domain gap} về tỉ lệ/độ phân giải.
+    \item Số object trung bình mỗi ảnh ở hai split tương đối gần nhau.
+\end{itemize}
+
+\subsection{Mất cân bằng class}
+Từ bảng phân bố class:
+\begin{itemize}[leftmargin=1.5em]
+    \item Tổng class quan sát được: 103/103 (khớp metadata).
+    \item Top-1 class chiếm 5.56\% tổng object.
+    \item Top-10 class chiếm 44.67\% tổng object.
+    \item Có 13 class xuất hiện dưới 10 ảnh.
+    \item Có 41 class xuất hiện dưới 50 ảnh.
+    \item Median số ảnh trên mỗi class là 81.
+\end{itemize}
+
+Điều này cho thấy dữ liệu có đuôi dài (long-tail) rõ rệt và cần chiến lược huấn luyện giảm bias về lớp phổ biến.

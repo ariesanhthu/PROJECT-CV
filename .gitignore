@@ -14,6 +14,8 @@
 # Output PDF
 main.pdf
 
+foodseg103/
+foodseg103_rebalanced/
 # --- Large datasets & archives ---
 source/dataset/foodseg103/
 source/dataset/foodseg103-full/

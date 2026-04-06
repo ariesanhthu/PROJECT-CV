@@ -1,0 +1,45 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{vietnamese}
+\setmainfont{Times New Roman}
+
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!50!black,
+    urlcolor=blue!50!black
+}
+
+\title{\textbf{B\'ao C\'ao Ph\^an T\'ich Dataset FoodSeg103}\\
+\large D\'ua tr\^en notebook \texttt{foodseg103\_dataset\_analysis.ipynb}}
+\author{PROJECT-CV}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\input{sections/01_tong_quan}
+\input{sections/02_quy_trinh_va_chi_so}
+\input{sections/03_ket_qua_hinh_anh}
+\input{sections/04_phan_tich_va_goi_y_sua_doi}
+\input{sections/05_ket_luan}
+
+\end{document}

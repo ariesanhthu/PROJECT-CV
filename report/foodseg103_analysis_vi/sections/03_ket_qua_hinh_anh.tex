@@ -1,0 +1,75 @@
+\section{Kết quả hình ảnh}
+
+Phần này trình bày đầy đủ các hình đã tạo từ notebook và dữ liệu đầu ra, nhằm kiểm chứng trực quan các chỉ số ở phần trước.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\linewidth]{integrity_by_split.png}
+    \caption{Số lượng ảnh theo trạng thái chất lượng ở mỗi split.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{size_and_objects_distribution.png}
+    \caption{Phân bố chiều rộng, chiều cao và số object trên mỗi ảnh.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{top20_objects.png}
+        \caption{Top 20 class theo số object}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{all_classes_objects.png}
+        \caption{Toàn bộ class theo số object}
+    \end{subfigure}
+    \caption{Mất cân bằng class trong FoodSeg103.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{long_tail_curve.png}
+        \caption{Đường cong long-tail}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{cumulative_object_share.png}
+        \caption{Đường cong tích lũy object}
+    \end{subfigure}
+    \caption{Phân tích mức độ tập trung của object ở các class phổ biến.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{rare_classes_under10_images.png}
+    \caption{Các class hiếm có tần suất xuất hiện dưới 10 ảnh.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{sample_masks_overlay.png}
+    \caption{Ví dụ giải mã mask và overlay trên ảnh gốc (mẫu từ train/test).}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{assessment_class_imbalance_1.png}
+        \caption{Hình tổng hợp đánh giá mất cân bằng (1)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{assessment_class_imbalance_2.png}
+        \caption{Hình tổng hợp đánh giá mất cân bằng (2)}
+    \end{subfigure}
+    \caption{Hai hình đánh giá bổ sung từ tài liệu assess.}
+\end{figure}
