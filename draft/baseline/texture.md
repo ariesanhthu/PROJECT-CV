@@ -25,7 +25,6 @@ class nào cần clean annotation trước
 
 
 ---
-Ổn rồi. Kết quả này cho thấy pipeline **đã chạy đúng pha 1**: build metadata → extract patch → tính handcrafted texture feature.
 
 Từ log của bạn, có vài ý quan trọng:
 
@@ -214,11 +213,3 @@ Nói cách khác:
 > **Bạn đã xong bước “thu thập bằng chứng texture”. Giờ không nên sửa extractor nữa, mà phải chuyển sang bước “tổng hợp class-level + similarity + actionables”.**
 
 ---
-
-## Việc nên làm tiếp ngay
-
-1. Tạo `texture_descriptives_by_class.csv`
-2. Tạo `texture_similarity_matrix.csv`
-3. Tạo `texture_vs_color_pairs.csv`
-4. Tạo `texture_actionables.csv`
-
