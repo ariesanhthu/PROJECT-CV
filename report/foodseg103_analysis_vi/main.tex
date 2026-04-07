@@ -1,10 +1,10 @@
 \documentclass[12pt,a4paper]{article}
 
 \usepackage[a4paper,margin=2.2cm]{geometry}
-\usepackage{fontspec}
-\usepackage{polyglossia}
-\setdefaultlanguage{vietnamese}
-\setmainfont{Times New Roman}
+% \usepackage{fontspec}
+% \usepackage{polyglossia}
+% \setdefaultlanguage{vietnamese}
+% \setmainfont{Times New Roman}
 
 \usepackage{graphicx}
 \graphicspath{{figures/}}
@@ -17,6 +17,8 @@
 \usepackage{siunitx}
 \usepackage{enumitem}
 \usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
 \usepackage{hyperref}
 
 \hypersetup{
@@ -37,9 +39,8 @@
 \newpage
 
 \input{sections/01_tong_quan}
-\input{sections/02_quy_trinh_va_chi_so}
-\input{sections/03_ket_qua_hinh_anh}
-\input{sections/04_phan_tich_va_goi_y_sua_doi}
-\input{sections/05_ket_luan}
+\input{sections/02_phan_tich_va_xu_li_du_lieu}
+\input{sections/03_baseline_model_va_pipeline}
+\input{sections/03_ket_luan}
 
 \end{document}

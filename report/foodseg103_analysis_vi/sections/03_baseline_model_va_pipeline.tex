@@ -1,0 +1,116 @@
+\section{Baseline Model: BiSeNet}
+
+\subsection{Mục tiêu baseline}
+Phần baseline được xây dựng để tạo một mốc tham chiếu rõ ràng cho bài toán phân vùng đa lớp trên bộ \texttt{FoodSeg103\_rebalanced}. Mô hình được chọn là BiSeNet vì cân bằng tốt giữa độ chính xác và tốc độ suy luận thời gian thực, phù hợp với hướng triển khai lightweight của đề tài.
+
+Mục tiêu của baseline gồm ba ý chính:
+\begin{itemize}[leftmargin=1.5em]
+    \item Thiết lập một kiến trúc chuẩn, tái lập được, bám theo thiết kế cốt lõi của paper BiSeNet.
+    \item Định nghĩa pipeline huấn luyện để làm nền cho các thí nghiệm cải tiến sau này.
+    \item Cung cấp bộ chỉ số đầu ra chuẩn hóa (mIoU, mAcc, pixel accuracy, thời gian suy luận) để so sánh.
+\end{itemize}
+
+\subsection{Kiến trúc baseline BiSeNet}
+Baseline sử dụng tư tưởng hai nhánh của BiSeNet:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Spatial Path}: giữ chi tiết không gian bằng chuỗi các phép tích chập stride nhỏ, hạn chế mất mát biên và hình dạng vật thể.
+    \item \textbf{Context Path}: trích xuất ngữ cảnh mức cao từ backbone nhẹ, kết hợp Attention Refinement Module để tăng chất lượng đặc trưng ngữ nghĩa.
+    \item \textbf{Feature Fusion Module}: hợp nhất đặc trưng từ hai nhánh và học trọng số thích nghi trước khi đưa vào head dự đoán segmentation.
+\end{itemize}
+
+Trong thiết lập baseline, hàm mất mát tổng được viết ở dạng:
+\[
+\mathcal{L}_{total} = \mathcal{L}_{main} + \lambda_1 \mathcal{L}_{aux1} + \lambda_2 \mathcal{L}_{aux2}
+\]
+trong đó $\mathcal{L}_{main}$ là loss của đầu ra chính, còn $\mathcal{L}_{aux1}, \mathcal{L}_{aux2}$ là các nhánh giám sát phụ để ổn định gradient ở giai đoạn đầu huấn luyện.
+
+\subsection{Pipeline baseline BiSeNet}
+Pipeline huấn luyện baseline được chuẩn hóa theo chuỗi sau:
+\begin{enumerate}[leftmargin=1.8em]
+    \item \textbf{Nạp dữ liệu}: đọc ảnh và mask từ tập train/val/test đã tách sẵn.
+    \item \textbf{Tiền xử lý}: resize về kích thước đầu vào cố định, chuẩn hóa theo mean/std, ánh xạ nhãn về tập class mục tiêu.
+    \item \textbf{Augmentation train}: áp dụng random flip, random scale/crop, và color jitter ở mức vừa phải để tăng khả năng khái quát.
+    \item \textbf{Forward pass}: đưa batch qua Spatial Path và Context Path, sau đó hợp nhất tại Feature Fusion Module.
+    \item \textbf{Tính loss}: tính loss đầu ra chính và các loss phụ, gộp theo công thức $\mathcal{L}_{total}$.
+    \item \textbf{Tối ưu}: cập nhật tham số bằng optimizer đã chọn, kèm scheduler giảm learning rate theo epoch.
+    \item \textbf{Đánh giá định kỳ}: tính mIoU/mAcc/pixel accuracy trên tập val, lưu checkpoint tốt nhất theo mIoU.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=6mm and 6mm,
+        block/.style={rectangle, rounded corners=2pt, draw=black, align=center, minimum height=8mm, minimum width=31mm, fill=blue!4},
+        line/.style={-{Stealth[length=2.4mm]}, thick}
+    ]
+        \node[block] (data) {Nạp dữ liệu\\(train/val/test)};
+        \node[block, below=of data] (pre) {Tiền xử lý\\resize + normalize};
+        \node[block, below=of pre] (aug) {Augmentation\\flip/scale/crop};
+        \node[block, below=of aug] (forward) {Forward pass\\Spatial + Context + Fusion};
+        \node[block, left=of forward] (loss) {Tính loss\\main + aux};
+        \node[block, right=of forward] (opt) {Tối ưu\\optimizer + scheduler};
+        \node[block, below=of forward] (eval) {Đánh giá val\\mIoU, mAcc, Pixel Acc};
+        \node[block, below=of eval] (ckpt) {Lưu checkpoint\\tốt nhất theo mIoU};
+
+        \draw[line] (data) -- (pre);
+        \draw[line] (pre) -- (aug);
+        \draw[line] (aug) -- (forward);
+        \draw[line] (forward) -- (loss);
+        \draw[line] (forward) -- (opt);
+        \draw[line] (loss) -- (eval);
+        \draw[line] (opt) -- (eval);
+        \draw[line] (eval) -- (ckpt);
+    \end{tikzpicture}
+    \caption{Biểu đồ pipeline baseline BiSeNet từ khâu dữ liệu đến lưu checkpoint.}
+    \label{fig:bisenet-baseline-pipeline}
+\end{figure}
+
+\subsection{Quá trình train baseline}
+Quy trình train được tổ chức theo hướng tái lập thí nghiệm, gồm khởi tạo seed, logging theo epoch, và cơ chế lưu mô hình tốt nhất. Khung cấu hình được trình bày như Bảng~\ref{tab:bisenet-baseline-config}. Các giá trị cụ thể có thể cập nhật sau khi hoàn tất lượt chạy chính thức.
+
+\begin{table}[H]
+    \centering
+    \caption{Cấu hình train cho baseline BiSeNet (mẫu điền số liệu)}
+    \label{tab:bisenet-baseline-config}
+    \begin{tabular}{ll}
+        \toprule
+        Thành phần & Giá trị sử dụng \\
+        \midrule
+        Input size & [Điền sau] \\
+        Batch size & [Điền sau] \\
+        Số epoch & [Điền sau] \\
+        Optimizer & [Điền sau] \\
+        Learning rate khởi tạo & [Điền sau] \\
+        Scheduler & [Điền sau] \\
+        Loss chính & [Điền sau] \\
+        Loss phụ (aux) & [Điền sau] \\
+        Trọng số $\lambda_1, \lambda_2$ & [Điền sau] \\
+        Regularization (weight decay, dropout) & [Điền sau] \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Ngoài các chỉ số cuối cùng, quá trình train nên theo dõi thêm:
+\begin{itemize}[leftmargin=1.5em]
+    \item Train loss và val loss theo epoch để phát hiện overfitting.
+    \item mIoU theo epoch để xác định điểm hội tụ.
+    \item Chênh lệch hiệu năng giữa nhóm lớp phổ biến và lớp hiếm để đánh giá tác động long-tail.
+\end{itemize}
+
+\subsection{Kết quả baseline (khung báo cáo để bổ sung số liệu)}
+Kết quả định lượng tổng thể có thể trình bày theo mẫu trong Bảng~\ref{tab:bisenet-baseline-results}. Bạn có thể điền số liệu sau khi hoàn tất đánh giá trên tập test.
+
+\begin{table}[H]
+    \centering
+    \caption{Kết quả baseline BiSeNet trên tập test (mẫu điền số liệu)}
+    \label{tab:bisenet-baseline-results}
+    \begin{tabular}{lcccc}
+        \toprule
+        Mô hình & mIoU (\%) & mAcc (\%) & Pixel Acc (\%) & FPS / ms ảnh \\
+        \midrule
+        BiSeNet Baseline & [Điền] & [Điền] & [Điền] & [Điền] \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Để phân tích sâu hơn, nên bổ sung thêm bảng per-class IoU cho một số lớp đại diện (nhóm phổ biến, trung bình, hiếm) để làm rõ ưu/nhược điểm của baseline trước khi áp dụng các cải tiến tiếp theo.
