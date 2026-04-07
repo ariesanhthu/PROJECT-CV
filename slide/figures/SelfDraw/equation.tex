@@ -1,0 +1,61 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        ybar,
+        % --- CẤU HÌNH KÍCH THƯỚC CHO SLIDE ---
+        width=14cm, height=5cm,       % Bề ngang rộng, chiều cao vừa phải
+        bar width=12pt,               % Độ rộng cột
+        enlarge x limits=0.15,        % Căn lề 2 bên
+        % -------------------------------------
+        ymin=0, ymax=70,              % Đặt trần cao hơn 57.9 một chút
+        ylabel={Độ chính xác (\%)},
+        % Định nghĩa trục X
+        symbolic x coords={GSM8K, SVAMP, ASDiv, MAWPS},
+        xtick=data,
+        % Hiển thị số liệu trên cột
+        nodes near coords,
+        every node near coord/.append style={
+            font=\scriptsize, 
+            /pgf/number format/fixed, 
+            /pgf/number format/precision=1
+        },
+        % Cấu hình hiển thị trục
+        axis x line*=bottom,
+        axis y line*=left,
+        ymajorgrids=true,
+        grid style=dashed,
+        tick label style={font=\footnotesize},
+        % --- LEGEND NẰM DƯỚI & NGANG ---
+        legend style={
+            at={(0.5,-0.2)},          % Đưa xuống dưới trục X
+            anchor=north,
+            legend columns=-1,        % Xếp thành 1 hàng ngang
+            font=\footnotesize,
+            draw=none,
+            cells={anchor=west},
+            column sep=1cm            % Khoảng cách giữa các chú thích
+        }
+    ]
+    % 1. Standard Prompting (Vàng nhạt)
+    \addplot[fill=yellow!50, draw=black] coordinates {
+        (GSM8K, 6.5) 
+        (SVAMP, 29.5) 
+        (ASDiv, 40.1)
+        (MAWPS, 43.2)
+    };
+    % 2. Equation Only (Gạch chéo - Pattern)
+    \addplot[pattern=north east lines, pattern color=black!70, draw=black] coordinates {
+        (GSM8K, 5.4) 
+        (SVAMP, 35.1) 
+        (ASDiv, 45.9)
+        (MAWPS, 50.1)
+    };
+    % 3. Chain-of-Thought (Cam đậm)
+    \addplot[fill=orange!80, draw=black] coordinates {
+        (GSM8K, 14.3) 
+        (SVAMP, 36.7) 
+        (ASDiv, 46.6)
+        (MAWPS, 57.9)
+    };
+    \legend{Standard Prompting, Equation only, Chain-of-Thought} 
+    \end{axis}
+\end{tikzpicture}

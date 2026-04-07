@@ -1,0 +1,69 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        ybar,
+        % --- CẤU HÌNH KÍCH THƯỚC CHO SLIDE ---
+        width=14cm, height=6cm,       % Phình ngang
+        bar width=10pt,               % Giảm độ rộng cột vì có tới 4 nhóm
+        enlarge x limits=0.2,         % Căn lề
+        % -------------------------------------
+        ymin=0, ymax=100,             % Trần 100%
+        ylabel={Độ chính xác (\%)},
+        % Trục X
+        symbolic x coords={GSM8K, SVAMP, Sports},
+        xtick=data,
+        xticklabels={GSM8K\\(Số học khó), SVAMP\\(Số học biến thể), Sports\\(Thường thức)},
+        x tick label style={align=center, font=\small},
+        % Hiển thị số liệu
+        nodes near coords,
+        every node near coord/.append style={
+            font=\tiny,               % Font số liệu nhỏ lại chút để đỡ chồng chéo
+            /pgf/number format/fixed, 
+            /pgf/number format/precision=1,
+            rotate=90,                % Xoay số liệu 90 độ nếu cần thiết (hoặc bỏ dòng này nếu muốn nằm ngang)
+            anchor=west
+        },
+        % Cấu hình trục
+        axis x line*=bottom,
+        axis y line*=left,
+        ymajorgrids=true,
+        grid style=dashed,
+        tick label style={font=\footnotesize},
+        % --- LEGEND ---
+        legend style={
+            at={(0.5,-0.3)},
+            anchor=north,
+            legend columns=-1,        % Xếp ngang
+            font=\scriptsize,
+            draw=none,
+            cells={anchor=west},
+            column sep=0.3cm          % Giảm khoảng cách giữa các chú thích
+        }
+    ]
+    % 1. Standard Prompting (Vàng nhạt)
+    \addplot[fill=yellow!50, draw=black] coordinates {
+        (GSM8K, 6.5) 
+        (SVAMP, 29.5) 
+        (Sports, 59.5)
+    };
+    % 2. CoT Annotator A - Gốc (Cam đậm)
+    \addplot[fill=orange!80, draw=black] coordinates {
+        (GSM8K, 14.3) 
+        (SVAMP, 36.7) 
+        (Sports, 85.8)
+    };
+    % 3. CoT Annotator B (Xanh dương nhạt)
+    \addplot[fill=cyan!30, draw=black] coordinates {
+        (GSM8K, 15.5) 
+        (SVAMP, 35.2) 
+        (Sports, 75.4)
+    };
+    % 4. CoT Annotator C (Xanh lá nhạt - Mới thêm)
+    \addplot[fill=green!40, draw=black] coordinates {
+        (GSM8K, 17.6) 
+        (SVAMP, 37.5) 
+        (Sports, 81.1)
+    };
+
+    \legend{Tiêu chuẩn, Người gán nhãn A, Người gán nhãn B, Người gán nhãn C}
+    \end{axis}
+\end{tikzpicture}

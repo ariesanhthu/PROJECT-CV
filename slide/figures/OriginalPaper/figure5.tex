@@ -1,0 +1,58 @@
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            % --- CẤU HÌNH KHOẢNG CÁCH ---
+            ybar=3.5pt,                   % Tạo khoảng cách nhỏ giữa các thanh (Yêu cầu 1)
+            bar width=8pt,                % Giữ thanh nhỏ gọn
+            width=6cm, height=6cm,        % Giảm width để hai nhóm LaMDA/PaLM gần nhau hơn (Yêu cầu 1)
+            enlarge x limits=0.4,         % Tăng lề 2 bên để đẩy dữ liệu vào giữa
+            % ---------------------------
+            ymin=0, ymax=62,
+            ytick={0, 20, 40, 60},
+            ylabel={Tỉ lệ phản hồi đúng trên GSM8K (\%)},
+            symbolic x coords={LaMDA 137B, PaLM 540B},
+            xtick=data,
+            nodes near coords,
+            every node near coord/.append style={font=\tiny, /pgf/number format/fixed, yshift=1pt},
+            % Cấu hình trục
+            axis x line*=bottom,
+            axis y line*=left,
+            ymajorgrids=true,
+            grid style=dashed,
+            tick label style={font=\footnotesize},
+            % --- CẤU HÌNH CHÚ THÍCH (LEGEND) BÊN PHẢI ---
+            legend style={
+                at={(1.05, 0.5)},          % Đặt ở tọa độ X=1.05 (bên phải ngoài khung), Y=0.5 (giữa)
+                anchor=west,               % Neo vào cạnh trái của hộp chú thích
+                legend columns=1,          % Xếp thành 1 cột dọc
+                font=\scriptsize, 
+                draw=none,                 % Không viền
+                legend cell align=left     % Canh lề trái cho chữ trong chú thích
+            }
+            % --------------------------------------------
+        ];
+        % 1. Standard Prompting
+        \addplot[fill=yellow!50, draw=black] coordinates {
+            (LaMDA 137B, 6.3) (PaLM 540B, 17.9)
+        };
+        % 2. Equation Only
+        \addplot[pattern=north east lines, pattern color=black!70, draw=black] coordinates {
+            (LaMDA 137B, 5.7) (PaLM 540B, 21.7)
+        };
+        % 3. Variable Compute Only
+        \addplot[pattern=crosshatch, pattern color=black!70, draw=black] coordinates {
+            (LaMDA 137B, 6.0) (PaLM 540B, 17.7)
+        };
+        % 4. Reasoning After Answer
+        \addplot[pattern=dots, pattern color=black!70, draw=black] coordinates {
+            (LaMDA 137B, 5.9) (PaLM 540B, 18.0)
+        };
+        % 5. Chain-of-Thought
+        \addplot[fill=orange!80, draw=black] coordinates {
+            (LaMDA 137B, 14.8) (PaLM 540B, 56.5)
+        };
+        \legend{Prompting tiêu chuẩn, Equation only, Variable compute, Reasoning after answer, CoT Prompting}
+        \end{axis}
+    \end{tikzpicture}
+\end{figure}
