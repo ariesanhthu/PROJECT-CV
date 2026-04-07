@@ -1,116 +1,57 @@
+Dựa trên nội dung chi tiết từ paper **BiSeNet (2018)** mà bạn cung cấp, tôi đã trau chuốt lại phần Baseline trong báo cáo của bạn. Bản chỉnh sửa này bổ sung các chi tiết kỹ thuật chuyên sâu về kiến trúc (SP, CP, ARM, FFM) và thảo luận thêm về lý do tại sao mô hình này phù hợp làm mốc tham chiếu cho bài toán phân vùng thực phẩm.
+
+---
+
 \section{Baseline Model: BiSeNet}
 
 \subsection{Mục tiêu baseline}
-Phần baseline được xây dựng để tạo một mốc tham chiếu rõ ràng cho bài toán phân vùng đa lớp trên bộ \texttt{FoodSeg103\_rebalanced}. Mô hình được chọn là BiSeNet vì cân bằng tốt giữa độ chính xác và tốc độ suy luận thời gian thực, phù hợp với hướng triển khai lightweight của đề tài.
+Phần baseline được xây dựng nhằm thiết lập một mốc tham chiếu hiệu năng cho bài toán phân vùng đa lớp thực phẩm trên bộ dữ liệu \texttt{FoodSeg103\_rebalanced}. BiSeNet (Bilateral Segmentation Network) được chọn làm baseline vì đây là một trong những kiến trúc đầu tiên thành công cân bằng giữađộ chính xác và tốc độ xử lý thời gian thực.
 
-Mục tiêu của baseline gồm ba ý chính:
+Việc thiết lập baseline với BiSeNet tập trung vào các mục tiêu:
 \begin{itemize}[leftmargin=1.5em]
-    \item Thiết lập một kiến trúc chuẩn, tái lập được, bám theo thiết kế cốt lõi của paper BiSeNet.
-    \item Định nghĩa pipeline huấn luyện để làm nền cho các thí nghiệm cải tiến sau này.
-    \item Cung cấp bộ chỉ số đầu ra chuẩn hóa (mIoU, mAcc, pixel accuracy, thời gian suy luận) để so sánh.
+    \item \textbf{Kiểm chứng khả năng trích xuất biên}: Đồ ăn thường có hình dạng phức tạp và không định hình; kiến trúc hai nhánh của BiSeNet giúp đánh giá khả năng giữ chi tiết không gian so với các mạng U-shape truyền thống.
+    \item \textbf{Tối ưu hóa tài nguyên}: Với đặc thù của các ứng dụng theo dõi dinh dưỡng cần chạy trên thiết bị di động, BiSeNet cung cấp nền tảng lightweight lý tưởng.
+    \item \textbf{Chuẩn hóa pipeline}: Định nghĩa quy trình huấn luyện đồng nhất để làm cơ sở so sánh công bằng cho các cải tiến về backbone hoặc module chú ý (attention) sau này.
 \end{itemize}
 
-\subsection{Kiến trúc baseline BiSeNet}
-Baseline sử dụng tư tưởng hai nhánh của BiSeNet:
+\subsection{Kiến trúc chi tiết của BiSeNet Baseline}
+Theo đề xuất của Changqian Yu và cộng sự, BiSeNet được cấu thành từ hai thành phần chính nhằm giải quyết hai yêu cầu mâu thuẫn trong phân vùng ngữ nghĩa: chi tiết không gian (spatial info) và trường thụ cảm (receptive field).
+
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Spatial Path}: giữ chi tiết không gian bằng chuỗi các phép tích chập stride nhỏ, hạn chế mất mát biên và hình dạng vật thể.
-    \item \textbf{Context Path}: trích xuất ngữ cảnh mức cao từ backbone nhẹ, kết hợp Attention Refinement Module để tăng chất lượng đặc trưng ngữ nghĩa.
-    \item \textbf{Feature Fusion Module}: hợp nhất đặc trưng từ hai nhánh và học trọng số thích nghi trước khi đưa vào head dự đoán segmentation.
+    \item \textbf{Spatial Path (Nhánh không gian)}: Thay vì sử dụng các phép tích chập giãn (dilated convolution) gây tốn kém tính toán, nhánh này chỉ gồm 3 tầng tích chập với stride = 2. Nhánh này trích xuất đặc trưng có kích thước bằng $1/8$ ảnh gốc, giúp bảo toàn các chi tiết cạnh và cấu trúc bề mặt của thực phẩm vốn rất dễ bị mất đi khi downsampling quá sâu.
+    \item \textbf{Context Path (Nhánh ngữ cảnh)}: Nhánh này sử dụng một backbone nhẹ (như Xception hoặc ResNet18) kết hợp với **Global Average Pooling (GAP)** để mở rộng tối đa trường thụ cảm. Điều này giúp mạng hiểu được mối quan hệ giữa các thành phần thực phẩm trong cùng một đĩa ăn (ví dụ: cơm thường đi kèm với thức ăn mặn).
+    \item \textbf{Attention Refinement Module (ARM)}: Được tích hợp vào hai giai đoạn cuối của Context Path. ARM sử dụng attention theo kênh (channel-wise attention) để tinh lọc đặc trưng, giúp mạng tập trung vào các vùng ngữ nghĩa quan trọng mà không làm tăng đáng kể chi phí tính toán.
+    \item \textbf{Feature Fusion Module (FFM)}: Do đặc trưng từ Spatial Path là mức thấp (low-level) còn Context Path là mức cao (high-level), chúng không thể cộng trực tiếp. FFM thực hiện nối (concatenate) hai luồng đặc trưng, sau đó sử dụng một cấu trúc tương tự SENet để tái trọng số hóa các kênh, đảm bảo sự hòa hợp giữa chi tiết không gian và thông tin ngữ cảnh.
 \end{itemize}
 
-Trong thiết lập baseline, hàm mất mát tổng được viết ở dạng:
+\subsection{Hàm mất mát và Chiến lược huấn luyện}
+Trong thiết lập baseline, chúng tôi sử dụng kỹ thuật **Giám sát sâu (Deep Supervision)** với hàm mất mát tổng hợp:
 \[
-\mathcal{L}_{total} = \mathcal{L}_{main} + \lambda_1 \mathcal{L}_{aux1} + \lambda_2 \mathcal{L}_{aux2}
+\mathcal{L}_{total} = \mathcal{L}_{principal} + \alpha \sum_{i=2}^{K} \mathcal{L}_{aux,i}
 \]
-trong đó $\mathcal{L}_{main}$ là loss của đầu ra chính, còn $\mathcal{L}_{aux1}, \mathcal{L}_{aux2}$ là các nhánh giám sát phụ để ổn định gradient ở giai đoạn đầu huấn luyện.
+Trong đó:
+\begin{itemize}[leftmargin=1.5em]
+    \item $\mathcal{L}_{principal}$: Loss chính tại đầu ra của Feature Fusion Module.
+    \item $\mathcal{L}_{aux,i}$: Loss phụ tại các giai đoạn của Context Path để hỗ trợ hội tụ nhanh hơn và tránh triệt tiêu gradient. Theo paper gốc, trọng số $\alpha$ thường được đặt bằng 1.
+    \item Tất cả các hàm loss đều sử dụng Softmax Cross Entropy để phân loại đa lớp thực phẩm.
+\end{itemize}
 
 \subsection{Pipeline baseline BiSeNet}
-Pipeline huấn luyện baseline được chuẩn hóa theo chuỗi sau:
-\begin{enumerate}[leftmargin=1.8em]
-    \item \textbf{Nạp dữ liệu}: đọc ảnh và mask từ tập train/val/test đã tách sẵn.
-    \item \textbf{Tiền xử lý}: resize về kích thước đầu vào cố định, chuẩn hóa theo mean/std, ánh xạ nhãn về tập class mục tiêu.
-    \item \textbf{Augmentation train}: áp dụng random flip, random scale/crop, và color jitter ở mức vừa phải để tăng khả năng khái quát.
-    \item \textbf{Forward pass}: đưa batch qua Spatial Path và Context Path, sau đó hợp nhất tại Feature Fusion Module.
-    \item \textbf{Tính loss}: tính loss đầu ra chính và các loss phụ, gộp theo công thức $\mathcal{L}_{total}$.
-    \item \textbf{Tối ưu}: cập nhật tham số bằng optimizer đã chọn, kèm scheduler giảm learning rate theo epoch.
-    \item \textbf{Đánh giá định kỳ}: tính mIoU/mAcc/pixel accuracy trên tập val, lưu checkpoint tốt nhất theo mIoU.
-\end{enumerate}
+Quy trình thực thi baseline được chuẩn hóa để đảm bảo tính tái lập:
 
 \begin{figure}[H]
     \centering
-    \begin{tikzpicture}[
-        node distance=6mm and 6mm,
-        block/.style={rectangle, rounded corners=2pt, draw=black, align=center, minimum height=8mm, minimum width=31mm, fill=blue!4},
-        line/.style={-{Stealth[length=2.4mm]}, thick}
-    ]
-        \node[block] (data) {Nạp dữ liệu\\(train/val/test)};
-        \node[block, below=of data] (pre) {Tiền xử lý\\resize + normalize};
-        \node[block, below=of pre] (aug) {Augmentation\\flip/scale/crop};
-        \node[block, below=of aug] (forward) {Forward pass\\Spatial + Context + Fusion};
-        \node[block, left=of forward] (loss) {Tính loss\\main + aux};
-        \node[block, right=of forward] (opt) {Tối ưu\\optimizer + scheduler};
-        \node[block, below=of forward] (eval) {Đánh giá val\\mIoU, mAcc, Pixel Acc};
-        \node[block, below=of eval] (ckpt) {Lưu checkpoint\\tốt nhất theo mIoU};
-
-        \draw[line] (data) -- (pre);
-        \draw[line] (pre) -- (aug);
-        \draw[line] (aug) -- (forward);
-        \draw[line] (forward) -- (loss);
-        \draw[line] (forward) -- (opt);
-        \draw[line] (loss) -- (eval);
-        \draw[line] (opt) -- (eval);
-        \draw[line] (eval) -- (ckpt);
-    \end{tikzpicture}
-    \caption{Biểu đồ pipeline baseline BiSeNet từ khâu dữ liệu đến lưu checkpoint.}
-    \label{fig:bisenet-baseline-pipeline}
+    \includegraphics[width=\linewidth]{img/BiSeNET-architecture.jpg}
+    \label{fig:bisenet-baseline-flow}
 \end{figure}
 
-\subsection{Quá trình train baseline}
-Quy trình train được tổ chức theo hướng tái lập thí nghiệm, gồm khởi tạo seed, logging theo epoch, và cơ chế lưu mô hình tốt nhất. Khung cấu hình được trình bày như Bảng~\ref{tab:bisenet-baseline-config}. Các giá trị cụ thể có thể cập nhật sau khi hoàn tất lượt chạy chính thức.
+\subsection{Thảo luận về sự phù hợp của BiSeNet làm Baseline}
+Dựa trên các kết quả thực nghiệm trong paper gốc (đạt 68.4\% mIoU trên Cityscapes với tốc độ 105 FPS), BiSeNet mang lại những lợi thế lý thuyết quan trọng cho đồ án này:
+\begin{enumerate}[leftmargin=1.8em]
+    \item \textbf{Khả năng xử lý đa quy mô (Multi-scale)}: Hình ảnh thực phẩm trong tập \texttt{FoodSeg103} có sự biến thiên lớn về kích thước (một hạt ngô nhỏ so với một miếng bít tết lớn). Nhánh Context Path với GAP giúp BiSeNet bao quát được các đối tượng kích thước lớn, trong khi Spatial Path giữ được các đối tượng nhỏ.
+    \item \textbf{Hiệu quả thực thi}: So với các mô hình như DeepLabv3+ (sử dụng Atrous Spatial Pyramid Pooling phức tạp), BiSeNet đạt hiệu năng tương đương nhưng tiêu tốn ít tài nguyên tính toán hơn nhờ thiết kế song song hai nhánh đơn giản. Điều này cho phép nhóm nghiên cứu thực hiện nhiều lượt thí nghiệm (ablation study) nhanh chóng trên tập dữ liệu thực phẩm lớn.
+    \item \textbf{Tính mô-đun}: Cấu trúc ARM và FFM rất linh hoạt, cho phép dễ dàng thay thế backbone hoặc tích hợp thêm các kỹ thuật xử lý dữ liệu mất cân bằng (long-tail) mà không cần thay đổi toàn bộ khung mạng.
+\end{enumerate}
 
-\begin{table}[H]
-    \centering
-    \caption{Cấu hình train cho baseline BiSeNet (mẫu điền số liệu)}
-    \label{tab:bisenet-baseline-config}
-    \begin{tabular}{ll}
-        \toprule
-        Thành phần & Giá trị sử dụng \\
-        \midrule
-        Input size & [Điền sau] \\
-        Batch size & [Điền sau] \\
-        Số epoch & [Điền sau] \\
-        Optimizer & [Điền sau] \\
-        Learning rate khởi tạo & [Điền sau] \\
-        Scheduler & [Điền sau] \\
-        Loss chính & [Điền sau] \\
-        Loss phụ (aux) & [Điền sau] \\
-        Trọng số $\lambda_1, \lambda_2$ & [Điền sau] \\
-        Regularization (weight decay, dropout) & [Điền sau] \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-
-Ngoài các chỉ số cuối cùng, quá trình train nên theo dõi thêm:
-\begin{itemize}[leftmargin=1.5em]
-    \item Train loss và val loss theo epoch để phát hiện overfitting.
-    \item mIoU theo epoch để xác định điểm hội tụ.
-    \item Chênh lệch hiệu năng giữa nhóm lớp phổ biến và lớp hiếm để đánh giá tác động long-tail.
-\end{itemize}
-
-\subsection{Kết quả baseline (khung báo cáo để bổ sung số liệu)}
-Kết quả định lượng tổng thể có thể trình bày theo mẫu trong Bảng~\ref{tab:bisenet-baseline-results}. Bạn có thể điền số liệu sau khi hoàn tất đánh giá trên tập test.
-
-\begin{table}[H]
-    \centering
-    \caption{Kết quả baseline BiSeNet trên tập test (mẫu điền số liệu)}
-    \label{tab:bisenet-baseline-results}
-    \begin{tabular}{lcccc}
-        \toprule
-        Mô hình & mIoU (\%) & mAcc (\%) & Pixel Acc (\%) & FPS / ms ảnh \\
-        \midrule
-        BiSeNet Baseline & [Điền] & [Điền] & [Điền] & [Điền] \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-
-Để phân tích sâu hơn, nên bổ sung thêm bảng per-class IoU cho một số lớp đại diện (nhóm phổ biến, trung bình, hiếm) để làm rõ ưu/nhược điểm của baseline trước khi áp dụng các cải tiến tiếp theo.
+\subsection{Kết quả dự kiến và Cấu hình (Bổ sung sau)}
+Các bảng số liệu (Bảng \ref{tab:bisenet-baseline-config} và \ref{tab:bisenet-baseline-results}) sẽ được điền chi tiết sau khi hoàn tất quá trình huấn luyện trên hệ thống GPU. Nhóm sẽ tập trung phân tích sự chênh lệch mIoU giữa các lớp thực phẩm có cấu trúc rõ ràng (như quả trứng, lát bánh mì) và các lớp có cấu trúc rời rạc (như cơm, rau băm) để đánh giá giới hạn của mô hình baseline.

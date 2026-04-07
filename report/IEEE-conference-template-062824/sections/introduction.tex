@@ -1,33 +1,23 @@
-\section{Tổng quan}
+\section{Giới thiệu}
+\subsection{Định nghĩa thuật ngữ}
 
-\subsection{Mục tiêu}
-Báo cáo này tổng hợp lại toàn bộ kết quả phân tích từ notebook
-\texttt{test/foodseg103\_dataset\_analysis.ipynb}, bao gồm:
-\begin{itemize}[leftmargin=1.5em]
-    \item kiểm tra toàn vẹn dữ liệu train/test,
-    \item thống kê kích thước ảnh và số object mỗi ảnh,
-    \item phân tích mất cân bằng class,
-    \item minh họa giải mã mask segmentation,
-    \item đề xuất hướng sửa đổi quy trình huấn luyện.
-\end{itemize}
+% Để đảm bảo tính nhất quán trong báo cáo, các thuật ngữ kỹ thuật được định nghĩa như sau:
+% \begin{itemize}[leftmargin=1.5em]
+%     \item \textbf{Semantic segmentation}: bài toán phân loại từng pixel trong ảnh thành các nhóm ngữ nghĩa khác nhau, tạo ra bản đồ phân vùng hoàn chỉnh.
+%     \item \textbf{Fine-grained}: ngữ cảnh mà các lớp khác nhau có độ tương đồng thị giác cao (khác biệt liên lớp nhỏ), trong khi biến thiên nội lớp lại lớn, gây khó khăn cho việc phân biệt.
+%     \item \textbf{Lightweight}: thiết kế mô hình hướng đến việc giảm số lượng tham số, phép tính (FLOPs) và độ trễ suy luận, nhằm cho phép triển khai trên các thiết bị có tài nguyên hạn chế \cite{he2015residual, dong2020mobilenetv2}.
+%     \item \textbf{Texture-aware}: cách tiếp cận chú trọng vào việc bảo toàn và khai thác đặc trưng kết cấu bề mặt như tín hiệu phân biệt cục bộ giữa các loại thực phẩm có màu sắc hoặc hình dạng tương tự.
+% \end{itemize}
 
-\subsection{Nguồn dữ liệu và phạm vi}
-\begin{itemize}[leftmargin=1.5em]
-    \item Dataset: FoodSeg103 (103 class foreground).
-    \item Tệp metadata: \texttt{meta.json}.
-    \item Thư mục annotation: \texttt{train/ann} và \texttt{test/ann}.
-    \item Thư mục ảnh: \texttt{train/img} và \texttt{test/img}.
-\end{itemize}
+Để đảm bảo tính nhất quán xuyên suốt báo cáo, các thuật ngữ kỹ thuật cốt lõi được định nghĩa và có mối liên hệ chặt chẽ với nhau. Trước hết, \textbf{semantic segmentation} (phân đoạn ngữ nghĩa) được hiểu là bài toán phân loại từng điểm ảnh (pixel) trong ảnh vào các nhóm ngữ nghĩa cụ thể, từ đó kiến tạo ra một bản đồ phân vùng hoàn chỉnh. Khi áp dụng vào dữ liệu thực phẩm, bài toán này thường xuyên phải xử lý các đối tượng mang đặc tính \textbf{fine-grained} (phân loại chi tiết). Ngữ cảnh này chỉ trạng thái mà các lớp đối tượng có độ tương đồng thị giác rất cao, khác biệt liên lớp nhỏ, nhưng lại biến thiên mạnh mẽ trong cùng một lớp, gây ra thách thức đáng kể cho việc định danh và phân tách ranh giới các nguyên liệu.
 
-Báo cáo này sử dụng các biểu đồ được tạo lại từ các tệp CSV đã xuất bởi notebook:
-\texttt{foodseg103\_file\_index.csv}, \texttt{foodseg103\_summary.csv},
-và \texttt{foodseg103\_class\_distribution.csv}.
+Nhằm đưa các giải pháp phân đoạn này vào ứng dụng thực tiễn, việc thiết kế mô hình theo hướng \textbf{lightweight} (cấu trúc nhẹ) là một yêu cầu tất yếu. Thiết kế này tập trung vào việc tối ưu hóa số lượng tham số, giảm thiểu khối lượng phép toán và độ trễ suy luận, qua đó cho phép triển khai hệ thống trên các thiết bị có tài nguyên phần cứng hạn chế \cite{he2015residual, dong2020mobilenetv2}. Tuy nhiên, việc tinh giản mô hình dễ làm suy giảm khả năng phân biệt các đối tượng \emph{fine-grained}. Để khắc phục sự đánh đổi này, phương pháp tiếp cận \textbf{texture-aware} (nhận thức kết cấu) được tích hợp vào quy trình. Hướng tiếp cận này đặc biệt chú trọng đến việc bảo toàn và khai thác các đặc trưng kết cấu bề mặt, coi đây là một tín hiệu phân biệt cục bộ then chốt giúp mô hình nhận diện chính xác các loại thực phẩm dù chúng có màu sắc hay hình dạng tương tự nhau.
 
-\subsection{Thành phần báo cáo}
-Báo cáo gồm 4 phần:
-\begin{enumerate}[leftmargin=1.5em]
-    \item Tổng quan,
-    \item Phân tích và xử lý dữ liệu,
-    \item Baseline model và pipeline,
-    \item Kết luận.
-\end{enumerate}
+\subsection{Bối cảnh và Động lực nghiên cứu}
+Sự phát triển của tự động hóa trong công nghiệp thực phẩm hiện đại đang đặt ra những yêu cầu ngày càng khắt khe đối với các hệ thống thị giác máy tính. Từ robot phân loại, chế biến nguyên liệu tự động, bếp ăn thông minh, đến các hệ thống giám sát dinh dưỡng tại bệnh viện, trường học và nền tảng phân tích thất thoát trong chuỗi cung ứng, tất cả đều đòi hỏi khả năng nhận diện và phân tích hình ảnh thực phẩm với độ chính xác và tốc độ cao \cite{mahalik2010trends, stemmer2018vision, gao2019smartfridge, wang2019smartrefrigerator}.
+
+Trong lĩnh vực thị giác máy tính ứng dụng cho thực phẩm, bài toán phân đoạn ngữ nghĩa (\emph{semantic segmentation}) đã chứng minh được ưu thế vượt trội so với các phương pháp truyền thống như phân loại ảnh, chỉ gán nhãn tổng thể hay phát hiện vật thể, chỉ xác định vị trí bằng khung bao \cite{long2015fcn, chen2017deeplab}. Khả năng tạo ra bản đồ phân vùng ở cấp độ điểm ảnh đóng vai trò đặc biệt quan trọng khi xử lý dữ liệu thực phẩm, nơi các nguyên liệu thường xuyên xếp chồng lên nhau, ranh giới mờ nhạt và hình dạng biến đổi không theo quy luật.
+
+Mặc dù vậy, các mô hình phân đoạn hiện đại thường tiêu tốn lượng lớn tài nguyên tính toán, gây khó khăn cho việc triển khai trên các thiết bị di động hay hệ thống nhúng. Thêm vào đó, ảnh thực phẩm mang đặc tính phân loại chi tiết (\emph{fine-grained}). Điều này đặt ra một bài toán mang tính đánh đổi: mô hình phải đủ nhẹ để đáp ứng yêu cầu triển khai thực tế, nhưng đồng thời vẫn phải bảo toàn lượng thông tin chi tiết cần thiết để phân biệt các lớp có đặc điểm thị giác gần giống nhau.
+
+Bài báo cáo này hướng tới việc giải quyết bài toán \textbf{texture-aware lightweight semantic segmentation for fine-grained food images} trên bộ dữ liệu chuẩn FoodSeg103 \cite{benchmarkfood}. Nhằm giải quyết những thách thức trên, một quy trình (\emph{pipeline}) cải tiến dựa trên mạng cơ sở BiSeNet \cite{bisenet} được đề xuất với ba trọng tâm cốt lõi: (1) tiếp tục tối ưu hóa chi phí tính toán để duy trì thiết kế gọn nhẹ (\emph{lightweight}); (2) tăng cường khả năng trích xuất và bảo toàn đặc trưng kết cấu bề mặt (\emph{texture})---được xem là tín hiệu phân loại then chốt; và (3) khắc phục tình trạng mất cân bằng dữ liệu thông qua phương pháp tái cấu trúc không gian nhãn.

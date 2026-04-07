@@ -1,7 +1,7 @@
 \section{Phân tích và tiền xử lý dữ liệu}
 
 \subsection{Bộ dữ liệu: FoodSeg103}
-FoodSeg103 là một trong những bộ dữ liệu chuẩn mực quy mô lớn đầu tiên được thiết kế chuyên biệt cho bài toán phân vùng hình ảnh thức ăn ở cấp độ nguyên liệu. Bộ dữ liệu này được giới thiệu bởi Wu và cộng sự tại hội nghị ACM Multimedia 2021, thông qua việc chắt lọc và gán nhãn thủ công từ Recipe1M - một kho dữ liệu khổng lồ chứa hàng triệu hình ảnh và công thức nấu ăn. Khác với các bộ dữ liệu trước đây thường chỉ giải quyết bài toán phân loại vùng có món ăn, FoodSeg103 đi sâu vào chi tiết của từng thành phần nguyên liệu cấu tạo nên món ăn đó.
+FoodSeg103 là một trong những bộ dữ liệu chuẩn mực quy mô lớn đầu tiên được thiết kế chuyên biệt cho bài toán phân vùng hình ảnh thức ăn ở cấp độ nguyên liệu. Bộ dữ liệu này được giới thiệu bởi Wu và cộng sự tại hội nghị ACM Multimedia 2021, thông qua việc chắt lọc và gán nhãn thủ công từ Recipe1M - một kho dữ liệu khổng lồ chứa hàng triệu hình ảnh và công thức nấu ăn \cite{benchmarkfood}. Khác với các bộ dữ liệu trước đây thường chỉ giải quyết bài toán phân loại vùng có món ăn, FoodSeg103 đi sâu vào chi tiết của từng thành phần nguyên liệu cấu tạo nên món ăn đó.
 
 Tập dữ liệu gồm tổng cộng 6117 ảnh, trong đó có 3982 ảnh huấn luyện và 2135 ảnh kiểm thử. Kích thước ảnh trung bình của train là $770.80\times640.58$ pixel, lớn hơn đáng kể so với test ở mức $578.80\times480.01$ pixel. Sự khác biệt về kích thước này dễ dẫn đến hiện tượng \emph{domain gap} do độ phân giải, làm suy giảm độ tin cậy của mô hình nếu dữ liệu không được tiền xử lý và chuẩn hóa nhất quán trên cả hai tập (split).
 
@@ -41,7 +41,7 @@ Trong phân đoạn ảnh thực phẩm, kết cấu bề mặt đặc biệt qu
 
 Vào 2023, Cote và cộng sự đã tiến hành nghiên cứu tầm quan trọng của việc khai thác dữ liệu vân của một tập dữ liệu gạch mosaic đa dạng. Kết quả cho thấy rằng kết cấu bề mặt là đặc trưng then chốt để phân biệt các vùng, đồng thời chỉ ra hạn chế của tập dữ liệu cũ và lợi ích vượt trội khi khai thác vân trong học sâu cho phân đoạn ngữ nghĩa. Vì tập dữ liệu về thực phẩm, tương tự, có đặc trưng kết cấu bề mặt đa dạng, nên kỹ thuật phân tích về vân được áp dụng với hy vọng mang lại hiệu quả tương tự.
 
-Cụ thể, để kiểm tra và xác nhận mức độ tương đồng về kết cấu bề mặt giữa các lớp con trước khi gộp, phương pháp phân tích texture dựa trên ma trận đồng xuất hiện mức xám (Gray-Level Co-occurrence Matrix - GLCM) – một descriptor thống kê kinh điển được Cote et al. (2023) trích dẫn từ Haralick et al. (1973) – được áp dụng. GLCM mô tả phân bố không gian của các giá trị mức xám trong vùng ảnh, từ đó trích xuất các đặc trưng texture chính: contrast (độ tương phản), homogeneity (độ đồng nhất), energy (năng lượng) và correlation (tương quan). Vector đặc trưng texture trung bình \(\mathbf{f}_k\) của mỗi lớp con \(k\) được tính từ các patch ảnh thuộc lớp đó. Độ tương đồng giữa hai lớp con \(i\) và \(j\) được định lượng bằng cosine similarity trên vector đặc trưng này:
+Cụ thể, để kiểm tra và xác nhận mức độ tương đồng về kết cấu bề mặt giữa các lớp con trước khi gộp, phương pháp phân tích texture dựa trên ma trận đồng xuất hiện mức xám (Gray-Level Co-occurrence Matrix - GLCM) – một descriptor thống kê kinh điển do Haralick và cộng sự đề xuất – được áp dụng \cite{haralick1973}. GLCM mô tả phân bố không gian của các giá trị mức xám trong vùng ảnh, từ đó trích xuất các đặc trưng texture chính: contrast (độ tương phản), homogeneity (độ đồng nhất), energy (năng lượng) và correlation (tương quan). Vector đặc trưng texture trung bình \(\mathbf{f}_k\) của mỗi lớp con \(k\) được tính từ các patch ảnh thuộc lớp đó. Độ tương đồng giữa hai lớp con \(i\) và \(j\) được định lượng bằng cosine similarity trên vector đặc trưng này:
 
 \[
 \text{Sim}(i,j) = \frac{\mathbf{f}_i \cdot \mathbf{f}_j}{\|\mathbf{f}_i\| \ \|\mathbf{f}_j\|}
@@ -102,10 +102,9 @@ kelp, seaweed
 Các lớp có tần suất rất thấp hoặc không đủ đặc trưng vân/màu sắc riêng biệt được ánh xạ vào lớp bao quát \texttt{other ingredients}. 
 
 Cách tiếp cận này không chỉ giảm số lớp từ 103 xuống còn 75 mà còn tăng đáng kể kích thước mẫu huấn luyện hiệu quả cho từng lớp đích, hạn chế mất mát thông tin so với việc loại bỏ hoàn toàn. Kết quả phân tích texture cho thấy sự gộp dựa trên GLCM và cosine similarity đã tạo ra các lớp đích có tính đồng nhất cao, phù hợp với đặc trưng của thực phẩm thực tế và nâng cao khả năng khái quát hóa của mô hình phân đoạn.
-\
 \subsection{Dữ liệu sau xử lý}
 
-Không gian nhãn giảm từ 103 xuống 75 lớp. Về số lượng ảnh, tập train giảm từ 3982 xuống 3981 ảnh (giảm 1 ảnh) và tập test giữ nguyên 2135 ảnh. Theo thống kê export trong notebook, ảnh bị loại chủ yếu do lỗi hỏng tệp ảnh (bad image), trong khi số ảnh bị loại do empty mask sau ánh xạ là 0 ở cả hai split.
+Không gian nhãn giảm từ 103 xuống 75 lớp, tập dữ liệu mới sẽ được đặt là \texttt{FoodSeg103\_rebalanced}. Về số lượng ảnh, tập train giảm từ 3982 xuống 3981 ảnh (giảm 1 ảnh) và tập test giữ nguyên 2135 ảnh. Theo thống kê export trong notebook, ảnh bị loại chủ yếu do lỗi hỏng tệp ảnh (bad image), trong khi số ảnh bị loại do empty mask sau ánh xạ là 0 ở cả hai split.
 
 \begin{table}[H]
     \centering
