@@ -1,0 +1,138 @@
+% Main file to include all non-linear learning algorithms slides
+% This file can be included in your main presentation using: \input{nonlinear_algorithms_content.tex}
+
+\section{Non-linear Learning Algorithms}
+
+% Introduction frame
+\begin{frame}{Non-linear Learning Algorithms: Tổng Quan}
+            \begin{enumerate}
+                \item \textbf{Support Vector Machines (SVM)}
+                \begin{itemize}
+                    \item Kernel methods, RBF kernel
+                \end{itemize}
+                
+                \item \textbf{Ensemble Tree Methods}
+                \begin{itemize}
+                    \item Random Forest, Extra Trees
+                \end{itemize}
+                
+                \item \textbf{Gradient Boosting}
+                \begin{itemize}
+                    \item Sequential weak learners
+                \end{itemize}
+            \end{enumerate}
+
+            % \begin{alertblock}{Trade-offs}
+            %     \begin{itemize}
+            %         \item \textbf{Accuracy}: SVM > GB > RF > ET
+            %         \item \textbf{Speed}: ET > RF > GB > SVM
+            %         \item \textbf{Interpretability}: Tree > SVM
+            %         \item \textbf{Scaling}: ET/RF > GB > SVM
+            %     \end{itemize}
+            % \end{alertblock}
+\end{frame}
+
+\begin{frame}{Benchmark Dataset: Breast Cancer Classification}
+
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+         \begin{figure}
+            \includegraphics[width=\linewidth]{img/breast_cancer_dataset.png}
+            \caption{Breast Cancer Dataset}
+         \end{figure}
+            \end{column}
+        \begin{column}{0.4\textwidth}
+            \vspace{1cm}
+                \begin{itemize}
+        \item 569 samples, 30 features
+        \item 50\% train, 50\% test split
+        \item Binary classification
+    \end{itemize}
+        \end{column}
+
+
+        
+    \end{columns}
+
+
+    
+\end{frame}
+
+% Include individual sections
+% SVM slides
+\input{sections/nonlinear_algo/1_svm_slide}
+
+% Random Forest slides
+\input{sections/nonlinear_algo/2_random_forest_slide}
+
+% Gradient Boosting slides
+\input{sections/nonlinear_algo/3_gradient_boosting_slide}
+
+% Comparison and Summary
+% \input{sections/nonlinear_algo/4_comparison_summary}
+
+% % Final recommendations frame
+% \begin{frame}[shrink=10]{Hướng dẫn Lựa chọn Thực tế}
+%     \begin{columns}[T]
+%         \begin{column}{0.5\textwidth}
+%             \begin{exampleblock}{Scenario 1: Không biết bắt đầu}
+%                 \begin{itemize}
+%                     \item \textbf{Hành động}: Dùng \textbf{Random Forest}
+%                     \item Đơn giản, nhanh, không cần chuẩn hóa
+%                     \item Baseline tốt để so sánh
+%                 \end{itemize}
+%             \end{exampleblock}
+
+%             \begin{exampleblock}{Scenario 2: Cần độ chính xác cao}
+%                 \begin{itemize}
+%                     \item \textbf{Thử}: Gradient Boosting
+%                     \item Tuning: $lr \in \{0.01, 0.05, 0.1\}$
+%                     \item Thêm: cross-validation để monitor
+%                 \end{itemize}
+%             \end{exampleblock}
+
+%             \begin{exampleblock}{Scenario 3: Dữ liệu rất lớn}
+%                 \begin{itemize}
+%                     \item \textbf{Dùng}: Extra Trees hoặc GB
+%                     \item Random Forest quá chậm
+%                     \item Xem xét sampling strategies
+%                 \end{itemize}
+%             \end{exampleblock}
+%         \end{column}
+
+%         \begin{column}{0.45\textwidth}
+%             \begin{alertblock}{Common Mistakes}
+%                 \begin{enumerate}
+%                     \item \textbf{Quên chuẩn hóa cho SVM}
+%                     \begin{itemize}
+%                         \item SVM nhạy cảm với scale
+%                         \item StandardScaler là BẮT BUỘC
+%                     \end{itemize}
+                    
+%                     \item \textbf{Vừa tune quá ít cho GB}
+%                     \begin{itemize}
+%                         \item $lr$ quá cao: thiếu học
+%                         \item $lr$ quá thấp: chậm hội tụ
+%                     \end{itemize}
+                    
+%                     \item \textbf{Không kiểm tra overfitting}
+%                     \begin{itemize}
+%                         \item Luôn dùng validation set
+%                         \item Cross-validation là lợi ích
+%                     \end{itemize}
+%                 \end{enumerate}
+%             \end{alertblock}
+
+%             \begin{block}{Next Steps}
+%                 \begin{itemize}
+%                     \item Implement trên dữ liệu của bạn
+%                     \item Grid search trên hyperparameters
+%                     \item So sánh với baseline (e.g., logistic regression)
+%                     \item Diễn giải results (feature importance, etc.)
+%                 \end{itemize}
+%             \end{block}
+%         \end{column}
+%     \end{columns}
+
+%     \hfill{\scriptsize \cite{duchesnay2021statsml}}
+% \end{frame}
