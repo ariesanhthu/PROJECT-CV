@@ -26,7 +26,7 @@ source/dataset/**/*.tar.gz
 source/dataset/**/*.tgz
 source/dataset/**/*.rar
 source/dataset/**/*.7z
-
+source/checkpoints.zip
 # Keep dataset documentation tracked (not ignored)
 !source/dataset/docs/
 

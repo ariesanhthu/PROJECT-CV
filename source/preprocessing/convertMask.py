@@ -19,7 +19,7 @@ from PIL import Image
 
 # 103 ingredient classes → ids 0..102; unlabeled pixels → 103 (background)
 BACKGROUND_ID = 103
-# Rebalanced taxonomy: foreground ids 1..76; unlabeled / dropped → 0
+# Rebalanced taxonomy: foreground ids 1..75; unlabeled / dropped → 0
 REBALANCED_BACKGROUND_ID = 0
 
 
@@ -212,7 +212,7 @@ def load_rebalanced_csv(
 
     Returns:
         Tuple ``(source_to_train_id, train_id_to_target_name, dropped_sources, target_title_to_id)``.
-        Dropped rows map to ``None`` in ``source_to_train_id``; kept rows map to ``1..76``.
+        Dropped rows map to ``None`` in ``source_to_train_id``; kept rows map to ``1..75``.
         ``target_title_to_id`` maps merged **target** names (e.g. ``vegetable``, ``mushroom``)
         to train ids so JSON ``classTitle`` fields that already use group names resolve.
 
@@ -370,7 +370,7 @@ def rasterize_rebalanced_annotation(
     canvas_w: int,
     canvas_h: int,
 ) -> np.ndarray:
-    """Rasterize JSON to a mask with rebalanced ids (1..76) and background 0.
+    """Rasterize JSON to a mask with rebalanced ids (1..75) and background 0.
 
     Skips objects whose ``classTitle`` is dropped (mapped to ``None``).
     Later objects overwrite earlier pixels.
@@ -383,7 +383,7 @@ def rasterize_rebalanced_annotation(
         canvas_h: Canvas height.
 
     Returns:
-        ``uint8`` array of shape ``(H, W)`` with values in ``{0, 1..76}``.
+        ``uint8`` array of shape ``(H, W)`` with values in ``{0, 1..75}``.
 
     Raises:
         KeyError: If an object references an unknown ``classTitle``.
@@ -498,13 +498,13 @@ def _stable_color_for_title(title: str) -> str:
 
 
 def update_rebalanced_meta(data_root: Path, train_id_to_target: dict[int, str]) -> None:
-    """Replace ``meta.json`` ``classes`` with the 76 rebalanced training classes.
+    """Replace ``meta.json`` ``classes`` with the 75 rebalanced training classes.
 
     Preserves ``tags``, ``projectType``, and ``projectSettings``.
 
     Args:
         data_root: Dataset root containing ``meta.json``.
-        train_id_to_target: Train ids ``1..76`` → canonical target name.
+        train_id_to_target: Train ids ``1..75`` → canonical target name.
 
     Returns:
         None.
@@ -635,7 +635,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
             "FoodSeg103: JSON ann to grayscale PNG masks "
-            "(standard: ids 0-102 + 103=bg; --rebalanced: ids 1-76 + 0=bg)."
+            "(standard: ids 0-102 + 103=bg; --rebalanced: ids 1-75 + 0=bg)."
         ),
     )
     parser.add_argument(
@@ -648,7 +648,7 @@ def main() -> None:
     parser.add_argument(
         "--rebalanced",
         action="store_true",
-        help="Use class_mapping.csv remap (76 fg + bg 0); refresh meta.json + class_mapping.json.",
+        help="Use class_mapping.csv remap (75 fg + bg 0); refresh meta.json + class_mapping.json.",
     )
     parser.add_argument(
         "--rebalance-csv",
