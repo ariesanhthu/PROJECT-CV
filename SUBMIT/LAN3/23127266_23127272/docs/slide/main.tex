@@ -1,0 +1,168 @@
+\documentclass[aspectratio=169]{beamer}
+\hypersetup{pdfpagemode=FullScreen}
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage[english]{babel}
+\usepackage[T5]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{curves}
+\usepackage{verbatim}
+\usepackage{multimedia}
+\usepackage{mathptmx}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{algorithm,algorithmic}
+
+% ORIGINAL PACKAGES
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\usepackage{wrapfig}
+% \usepackage{natbib} % (removed) natbib is incompatible with biblatex
+\newcommand{\lamda}{LaMDA}
+\newcommand{\palm}{PaLM}
+
+% table package
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{patterns, calc}
+\usepackage{colortbl}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows, positioning, shapes}
+
+% --- CAU HINH REFERENCES (APA) ---
+\usepackage{csquotes}
+\usepackage[style=apa, backend=biber]{biblatex}
+\DeclareLanguageMapping{english}{english-apa}
+\addbibresource{ref/ref.bib}
+% ---------------------------------
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\usepackage{lipsum}
+\setbeamertemplate{caption}[numbered]
+
+\mode<presentation> {
+    \usetheme{Madrid}
+    \usecolortheme{whale}
+    \setbeamertemplate{navigation symbols}{}
+}
+
+\setbeamercovered{transparent}
+\setbeamertemplate{bibliography item}[text]
+\setbeamertemplate{theorems}[numbered]
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{date}{size=\tiny}
+
+\setbeamertemplate{itemize items}{\textendash}
+\setbeamertemplate{itemize subitem}[circle]
+\setbeamertemplate{itemize subsubitem}[square]
+
+\useoutertheme[subsection=false]{miniframes}%
+
+%-------customized frame-------
+\newcounter{cont}
+
+\makeatletter
+\definecolor{myGreen}{rgb}{0.0, 0.5, 0.0}
+\definecolor{myRed}{rgb}{0.8, 0.2, 0.2}
+\newcommand{\jgr}[1]{\textcolor{myGreen}{\textbf{#1}}}
+\newcommand{\jred}[1]{\textcolor{myRed}{#1}}
+\newcommand{\stanchain}[0]{{\scriptsize Std} & {\scriptsize CoT}}
+\newcommand{\diff}[2]{#1 {\scriptsize \textcolor{blue}{(#2)}}}
+\newcommand{\calc}[1]{\textcolor{gray}{#1}}
+\makeatother
+
+\makeatletter
+\setbeamertemplate{title page}{
+    \begin{centering}
+        {\usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute\par}
+
+        \begin{beamercolorbox}[sep=1em,rounded=true,shadow=true,center,wd=\textwidth]{title}
+            \usebeamerfont{title}\color{white}\inserttitle
+        \end{beamercolorbox}
+        \vskip 1em
+
+        {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\par}
+        \vskip 0.5em
+
+        {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate\par}
+    \end{centering}
+}
+\makeatother
+
+\makeatletter
+\setbeamertemplate{frametitle continuation}{}
+\makeatother
+
+\definecolor{your_color}{HTML}{111c88}
+\setbeamercolor{structure}{fg=your_color}
+
+%-------set title, author, date-------
+
+\title[Dimension Reduction \& Classification]{Dimension Reduction, Linear Classification\\and Non-linear Learning Algorithms}
+\author[Nhóm thực hiện]{Nhóm thực hiện}
+
+\institute[]{
+    \includegraphics[width=0.25\textwidth]{img/logo.png} \\[0.1cm]
+    Trường Đại học Khoa học tự nhiên, ĐHQG-HCM\\
+    Khoa Công nghệ Thông tin
+    \vspace{0.5cm}
+}
+\date{TP. Hồ Chí Minh, 19/03/2026}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+    \setbeamertemplate{footline}[page number]
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+    \frametitle{Mục lục}
+    \tableofcontents
+\end{frame}
+\AtBeginSection[]
+{
+\begin{frame}[allowframebreaks]
+    \frametitle{Mục lục}
+    \tableofcontents[currentsection]
+\end{frame}
+}
+
+\input{sections/content.tex}
+
+\begin{frame}[allowframebreaks]{Tài liệu tham khảo}
+    \printbibliography
+\end{frame}
+ 
+\begingroup
+    \setbeamercolor{background canvas}{bg=your_color}
+    \setbeamertemplate{footline}{}
+    \begin{frame}[c]
+        \vfill
+        \begin{center}
+            \Large\textcolor{white}{Key question}
+        \end{center}
+        \vfill
+    \end{frame}
+\endgroup
+
+\begingroup
+    \setbeamercolor{background canvas}{bg=white}
+    \begin{frame}[c]
+        \vfill
+        \begin{center}
+            \Huge\textcolor{your_color}{\textbf{Cảm ơn thầy, cô và các bạn\\ đã chú ý lắng nghe!}}
+        \end{center}
+        \vfill
+    \end{frame}
+\endgroup
+
+\end{document}

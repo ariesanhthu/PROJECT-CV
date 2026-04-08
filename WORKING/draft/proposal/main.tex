@@ -1,0 +1,96 @@
+\documentclass[final]{uitproposal}
+\usepackage[utf8]{vietnam}
+\usepackage{placeins}
+\usepackage{amsfonts}
+\usepackage{textcomp}
+\usepackage{dblfloatfix}
+\usepackage{subfig}
+\usepackage{lineno}
+\usepackage{amssymb}
+\usepackage{tabularx,booktabs}
+\usepackage{longtable, lipsum}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{lscape}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage[sorting=nyt]{biblatex}
+\usepackage{mathtools}
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{makecell}
+\usepackage{lipsum}
+\usepackage{etoolbox}
+\usepackage{enumitem}
+\usepackage{float}
+\usetikzlibrary{positioning, shapes.geometric, arrows.meta}
+
+% === Giảm spacing toàn tài liệu ===
+\setlength{\parskip}{0.3em plus 0.15em minus 0.1em}
+\titlespacing*{\section}{0pt}{1.1ex plus 0.3ex}{0.6ex plus 0.2ex}
+\titlespacing*{\subsection}{0pt}{0.9ex plus 0.2ex}{0.45ex plus 0.15ex}
+\titlespacing*{\subsubsection}{0pt}{0.7ex plus 0.2ex}{0.35ex plus 0.1ex}
+\setlist{topsep=0.25em, partopsep=0pt, parsep=0pt, itemsep=0.2em}
+
+% Config variable
+
+\title{
+  Experimental Study of DeepLabV3 for Semantic Segmentation on FoodSeg103 with Lightweight Backbone toward Mobile Deployment
+}
+
+% \vntitle{Khảo sát và thực nghiệm mô hình DeepLabV3 với backbone lightweight cho bài toán phân đoạn ngữ nghĩa trên tập dữ liệu FoodSeg103 nhằm tối ưu tốc độ suy luận trên thiết bị di động}
+\vntitle{Thực nghiệm các mô hình học sâu CNN-based nhẹ trong tác vụ phân đoạn ngữ nghĩa trên tập dữ liệu FoodSeg103}
+\proposaltype{Đồ án môn Thị giác máy tính}
+
+\supervisorname{TS. Võ Hoài Việt \\ Ths. Phạm Thanh Tùng \\ NCS. Ths. Phạm Minh Hoàng}
+ 
+\studentname{23127266 - Nguyễn Anh Thư \\ 23127272 - Nguyễn Thiên Nhã Trân}
+
+% \newcommand{\studentname}{23127266 - Nguyễn Anh Thư \\ 23127272 - Nguyễn Thiên Nhã Trân}
+% \newcommand{\teachername}{Nguyễn Trọng Việt \\ Phạm Thanh Tùng \\ Võ Thế Hào}
+
+
+% Config reference
+\addbibresource{references/chapter-1.bib}
+\addbibresource{references/chapter-2.bib}
+
+
+% Begin document
+
+\begin{document}
+\headerbox
+\vnproposalheader
+\vnproposalname
+\clearpage
+\counterwithin{equation}{section}
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+\setcounter{secnumdepth}{3}
+
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyfoot[C]{\thepage}
+
+\if @twoside
+  \fancyhead[EL,OR]{\bfseries\nouppercase\rightmark}
+\else
+  \fancyhead[R]{\bfseries\nouppercase\rightmark}
+\fi
+
+\input{proposal/vn/section1.tex}
+\input{proposal/vn/section2.tex}
+\input{proposal/vn/section3.tex}
+\input{proposal/vn/section4.tex}
+\input{proposal/vn/section5.tex}
+
+\begingroup
+\let\clearpage\relax
+\printbibliography[heading=bibintoc, title = {Tài liệu tham khảo}]
+\endgroup
+
+\end{document}
+

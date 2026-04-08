@@ -1,0 +1,104 @@
+\begin{frame}{SVM: Khác gì giữa Linear và Kernel?}
+    \begin{columns}
+        \begin{column}{0.42\textwidth}
+        \textbf{Linear SVM}:\\
+            - Tìm một đường thẳng (hoặc siêu phẳng) để phân chia dữ liệu\\
+            - Hoạt động trực tiếp trên dữ liệu gốc $x$\\
+            - Phù hợp khi dữ liệu \textbf{có thể tách tuyến tính}
+        \end{column}
+
+        \begin{column}{0.57\textwidth}
+        \textbf{Kernel SVM}:\\
+            - Dùng \textbf{kernel} để biến dữ liệu sang không gian khác\\
+            - Giúp tạo ra \textbf{đường phân chia cong} (phi tuyến)\\
+            - Phù hợp khi dữ liệu \textbf{không tách được bằng đường thẳng}
+        \end{column}
+    \end{columns}
+
+    \begin{alertblock}{Vì sao cần Kernel?}
+        Thay vì biến đổi dữ liệu sang không gian nhiều chiều (rất tốn chi phí),
+        ta chỉ cần tính \textbf{độ giống nhau} giữa hai điểm bằng hàm $K(x_i, x_j)$.\\
+        Kernel Trick giúp:
+        \begin{itemize}
+            \item Xử lý được dữ liệu phi tuyến
+            \item Không cần thực sự tính toán trong không gian cao chiều
+            \item Giữ chi phí tính toán thấp hơn
+        \end{itemize}
+        % Đã xóa thẻ \end{itemize} bị thừa ở đây
+    \end{alertblock}
+
+    \vspace{0.2cm}
+
+    \textbf{Hàm quyết định:}
+    \[
+        f(x) = \operatorname{sign}\left(\sum_i \alpha_i y_i K(x_i, x) + b\right)
+    \]
+\end{frame}
+
+\begin{frame}{RBF Kernel: điểm khác biệt chính với Linear SVM}
+                  Kernel được sử dụng phổ biến nhất là RBF kernel:
+                \[
+                    K(x_i, x_j) = \exp\left(-\frac{\|x_i - x_j\|^2}{2\sigma^2}\right)
+                \]
+                hoặc viết lại:
+                \[
+                    K(x_i, x_j) = \exp\left(-\gamma \|x_i - x_j\|^2\right)
+                \]
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{alertblock}{Ý nghĩa hình học}
+                \begin{itemize}
+                    \item Hàm Gaussian tâm ở mỗi điểm dữ liệu $x_i$
+                    \item Độ tương tự giảm theo khoảng cách Euclid bình phương
+                    \item $\sigma$ điều khiển độ rộng kernel
+                \end{itemize}
+            \end{alertblock}
+        \end{column}
+
+        \begin{column}{0.48\textwidth}
+
+            \begin{block}{Lợi ích RBF}
+                \begin{itemize}
+                    \item Linh hoạt cho các bài toán phi tuyến
+                    \item Dễ cài đặt và tối chỉnh
+                    \item Hoạt động tốt với dữ liệu nhiều chiều
+                \end{itemize}
+                \vspace{0.5cm}
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \hfill{\scriptsize \cite{duchesnay2021statsml}}
+\end{frame}
+
+\begin{frame}[shrink=10]{SVM: Đánh giá}
+            \begin{columns}[T]
+                \begin{column}{0.48\textwidth}
+                    \textbf{Ưu điểm:}
+                    \begin{itemize}
+                        \item Hiệu quả với dữ liệu nhiều chiều, biên phân tách rõ
+                        \item Tổng quát hóa tốt nhờ tối ưu margin
+                        \item Kết hợp kernel để xử lý quan hệ phi tuyến
+                    \end{itemize}
+                \end{column}
+                \begin{column}{0.48\textwidth}
+                    \textbf{Nhược điểm:}
+                    \begin{itemize}
+                        \item Nhạy với tham số $C$, $\gamma$ và lựa chọn kernel
+                        \item Chi phí huấn luyện cao khi số mẫu lớn
+                        \item Khó diễn giải trực quan hơn một số mô hình tuyến tính
+                    \end{itemize}
+                \end{column}
+            \end{columns}
+
+            \begin{alertblock}{Kết quả mẫu (Breast Cancer)}
+                Sử dụng RBF kernel + StandardScaler:
+                \begin{itemize}
+                    \item \textbf{bAcc}: 0.97 (Balanced Accuracy)
+                    \item \textbf{AUC}: 0.99 (công thức)
+                    \item \textbf{AUC}: 0.99 (xác suất)
+                \end{itemize}
+            \end{alertblock}
+
+    \hfill{\scriptsize \cite{duchesnay2021statsml}}
+\end{frame}

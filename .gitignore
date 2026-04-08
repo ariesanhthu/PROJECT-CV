@@ -14,21 +14,21 @@
 # Output PDF
 main.pdf
 
-foodseg103/
-foodseg103_rebalanced/
+WORKING/source/dataset/foodseg103/
+WORKING/source/dataset/foodseg103_rebalanced/
 # --- Large datasets & archives ---
-source/dataset/foodseg103/
-source/dataset/foodseg103-full/
-source/dataset/foodseg103_rebalanced/
-source/dataset/**/*.zip
-source/dataset/**/*.tar
-source/dataset/**/*.tar.gz
-source/dataset/**/*.tgz
-source/dataset/**/*.rar
-source/dataset/**/*.7z
-source/checkpoints.zip
+WORKING/source/dataset/foodseg103/
+WORKING/source/dataset/foodseg103-full/
+WORKING/source/dataset/foodseg103_rebalanced/
+WORKING/source/dataset/**/*.zip
+WORKING/source/dataset/**/*.tar
+WORKING/source/dataset/**/*.tar.gz
+WORKING/source/dataset/**/*.tgz
+WORKING/source/dataset/**/*.rar
+WORKING/source/dataset/**/*.7z
+WORKING/source/checkpoints.zip
 # Keep dataset documentation tracked (not ignored)
-!source/dataset/docs/
+!WORKING/source/dataset/docs/
 
 # --- Model weights & training artifacts ---
 *.pt

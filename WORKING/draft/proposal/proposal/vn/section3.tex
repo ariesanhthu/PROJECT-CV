@@ -1,0 +1,91 @@
+\section{Phương pháp nghiên cứu}
+
+% \label{method}
+
+\subsection{Hình thức nghiên cứu}
+
+Nghiên cứu thực nghiệm.
+
+\subsection{Dữ liệu}
+
+Nghiên cứu sử dụng tập dữ liệu \textbf{FoodSeg103}, bao gồm \textbf{7.118 hình ảnh thực phẩm} được gán nhãn phân đoạn ở mức pixel cho \textbf{103 loại nguyên liệu khác nhau}. Dữ liệu được trích xuất từ tập Recipe1M và được gán nhãn thủ công. Tập dữ liệu được chia thành:
+\begin{itemize}
+    \item 4.983 ảnh dùng để huấn luyện;
+    \item 2.135 ảnh dùng để kiểm tra hoặc đánh giá mô hình.
+\end{itemize}
+
+Các bước tiền xử lý dữ liệu bao gồm: resize ảnh, random crop, horizontal flip, color jitter. Những kỹ thuật này giúp cải thiện khả năng tổng quát hóa của mô hình.
+
+\subsection{Mô hình cơ sở}
+
+Mô hình baseline sử dụng trong nghiên cứu là \textbf{DeepLabV3}. DeepLabV3 sử dụng atrous convolution để điều chỉnh trường nhìn (field-of-view) của mạng và mô-đun ASPP để tổng hợp thông tin ngữ cảnh đa tỉ lệ. Các cấu hình sau sẽ được thử nghiệm:
+\begin{itemize}
+    \item DeepLabV3 + ResNet (baseline);
+    \item DeepLabV3 + MobileNetV2;
+    \item DeepLabV3 + MobileNetV3.
+\end{itemize}
+Mục tiêu là so sánh hiệu năng của các backbone này.
+
+\subsection{Pipeline thực hiện}
+
+\begin{figure}[h]
+\centering
+\footnotesize
+\begin{tikzpicture}[
+  node distance=0.5cm and 0.6cm,
+  box/.style={rectangle, draw, rounded corners=1pt, align=center, minimum height=0.5cm},
+  dia/.style={diamond, draw, aspect=1.8, align=center, minimum width=0.8cm},
+  arr/.style={-{Stealth[length=1.5pt]}, font=\tiny}
+]
+  \node[box] (A) {FoodSeg103 (4983 train / 2135 test)};
+  \node[box, below=of A] (B) {Preprocess + Augment};
+  \node[dia, below=of B] (C) {Resolution};
+  \node[box, below=0.5cm of C, xshift=-1.1cm] (D1) {256};
+  \node[box, right=0.15cm of D1] (D2) {320};
+  \node[box, right=0.15cm of D2] (D3) {384};
+  \node[box, right=0.15cm of D3] (D4) {512};
+  \node[box, below=2cm of C] (E) {DeepLabV3};
+  \node[dia, below=of E] (F) {Backbone};
+  \node[box, below=0.9cm of F, xshift=-2cm] (G1) {ResNet};
+  \node[box, right=0.15cm of G1] (G2) {MobileNetV2};
+  \node[box, right=0.15cm of G2] (G3) {MobileNetV3};
+  \node[box, below=2cm of F] (H) {Eval: mIoU, mAcc, aAcc};
+  \node[box, below=of H] (I) {Export: TFLite/ExecuTorch};
+  \node[box, below=of I] (J) {Mobile benchmark};
+
+  \draw[arr] (A) -- (B);
+  \draw[arr] (B) -- (C);
+  \draw[arr] (C) -- (D1) (C) -- (D2) (C) -- (D3) (C) -- (D4);
+  \draw[arr] (D1) -- (E) (D2) -- (E) (D3) -- (E) (D4) -- (E);
+  \draw[arr] (E) -- (F);
+  \draw[arr] (F) -- (G1) (F) -- (G2) (F) -- (G3);
+  \draw[arr] (G1) -- (H) (G2) -- (H) (G3) -- (H);
+  \draw[arr] (H) -- (I) -- (J);
+\end{tikzpicture}
+\caption{Pipeline thực hiện}
+\end{figure}
+
+\subsection{Các cải tiến đề xuất}
+
+\subsubsection{Boundary refinement}
+
+Do các nguyên liệu trong ảnh thực phẩm thường có ranh giới không rõ ràng, nghiên cứu sẽ thử nghiệm các phương pháp cải thiện ranh giới phân đoạn như: sử dụng decoder kiểu DeepLabV3+; thêm các phương pháp tối ưu ranh giới đối tượng. Những phương pháp này giúp cải thiện độ chính xác ở vùng biên của các đối tượng trong ảnh.
+
+\subsubsection{Test-time augmentation}
+
+Một số kỹ thuật tăng cường dữ liệu tại thời điểm suy luận cũng sẽ được thử nghiệm, ví dụ: lật ảnh (flip), thay đổi tỷ lệ (scale). Các dự đoán từ nhiều biến đổi sẽ được kết hợp để cải thiện độ chính xác của mô hình.
+
+\subsubsection{Tối ưu cho thiết bị di động}
+
+Mô hình sau khi huấn luyện sẽ được tối ưu hóa để triển khai trên thiết bị di động. Các bước có thể bao gồm: xuất mô hình sang định dạng triển khai; tối ưu hóa suy luận; thử nghiệm quantization để giảm kích thước mô hình.
+
+\subsection{Phương pháp đánh giá}
+
+Hiệu năng của các mô hình sẽ được đánh giá bằng các chỉ số sau:
+\begin{itemize}
+    \item \textbf{Mean Intersection over Union (mIoU)};
+    \item \textbf{Pixel Accuracy};
+    \item \textbf{Inference time (latency)};
+    \item \textbf{Kích thước mô hình}.
+\end{itemize}
+Các chỉ số này giúp đánh giá sự cân bằng giữa độ chính xác và hiệu quả tính toán của mô hình.

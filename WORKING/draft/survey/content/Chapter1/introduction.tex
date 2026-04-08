@@ -1,0 +1,45 @@
+\chapter{Giới thiệu}
+
+\section{Tổng quan}
+
+Image segmentation là một trong những bài toán quan trọng của computer vision, với mục tiêu phân chia một ảnh thành các vùng có ý nghĩa để phục vụ cho việc hiểu nội dung của cảnh. Khác với các bài toán như image classification hoặc object detection chỉ dự đoán nhãn ở mức toàn ảnh hoặc bounding box, segmentation yêu cầu mô hình đưa ra dự đoán cho \textbf{từng pixel trong ảnh}. Vì vậy, segmentation thường được xem là một bài toán \textbf{dense prediction}.
+
+Trong nhiều năm gần đây, image segmentation đóng vai trò quan trọng trong nhiều ứng dụng thực tế như autonomous driving, medical image analysis, robotics, và remote sensing. Sự phát triển của deep learning, đặc biệt là convolutional neural networks và transformer-based models, đã giúp cải thiện đáng kể hiệu suất của các phương pháp segmentation.
+
+\section{Định nghĩa phân đoạn ảnh}
+
+Image segmentation là quá trình phân hoạch một ảnh thành nhiều vùng (regions) hoặc segments khác nhau nhằm đơn giản hóa biểu diễn của ảnh và giúp việc phân tích, hiểu nội dung ảnh trở nên dễ dàng hơn~\cite{lateef2019survey}. Mỗi segment thường bao gồm các pixel có đặc trưng tương đồng về màu sắc, cường độ hoặc texture.
+
+Trong bối cảnh học sâu, segmentation thường được biểu diễn như một hàm ánh xạ từ ảnh đầu vào sang bản đồ nhãn. Cho ảnh đầu vào $I \in \mathbb{R}^{H \times W \times C}$, mục tiêu của mô hình segmentation là dự đoán bản đồ nhãn
+\begin{equation}
+Y \in \{1, 2, \ldots, K\}^{H \times W}
+\end{equation}
+trong đó mỗi pixel $(i, j)$ được gán một nhãn lớp thuộc tập $K$ lớp. Như vậy, segmentation có thể được xem là bài toán \textbf{pixel-wise classification}, trong đó mô hình thực hiện phân lớp cho từng pixel trong ảnh.
+
+\section{Các loại phân đoạn ảnh}
+
+Trong computer vision hiện đại, segmentation thường được chia thành bốn loại chính:
+
+\begin{itemize}
+\item \textbf{Image segmentation (phân đoạn ảnh cơ bản)}: Phân hoạch ảnh thành các vùng dựa trên đặc trưng low-level như màu sắc, cường độ hoặc texture~\cite{lateef2019survey}. Không gán nhãn ngữ nghĩa---chỉ tách các region dựa trên độ tương đồng về mặt hình ảnh. Đây là nền tảng cho các bài toán segmentation nâng cao hơn.
+\item \textbf{Semantic segmentation (phân đoạn ngữ nghĩa)}: Gán nhãn lớp cho mỗi pixel trong ảnh, nhưng không phân biệt các instance khác nhau của cùng một lớp. Ví dụ, tất cả pixel thuộc lớp ``car'' sẽ có cùng nhãn.
+\item \textbf{Instance segmentation (phân đoạn instance)}: Không chỉ phân lớp pixel mà còn phân biệt các instance riêng biệt của cùng một đối tượng. Ví dụ, hai chiếc xe khác nhau được gán hai instance khác nhau.
+\item \textbf{Panoptic segmentation (phân đoạn toàn cảnh)}: Kết hợp semantic và instance segmentation: mỗi pixel được gán nhãn lớp; với ``thing'' (vật có hình dạng cố định như xe, người) còn có thông tin instance; với ``stuff'' (vùng không có hình dạng cố định như trời, biển) chỉ có nhãn semantic.
+\end{itemize}
+
+\section{Phân đoạn ngữ nghĩa}
+
+Semantic segmentation là bài toán gán nhãn cho từng region hoặc từng pixel trong ảnh với một class ngữ nghĩa cụ thể (ví dụ: car, road, sky, vegetation). Theo \cite{lateef2019survey}, semantic segmentation được định nghĩa là \emph{``labeling each region or pixel with a class of objects or non-objects''}---tức là thực hiện pixel-wise classification, trong đó mỗi pixel được gán một nhãn semantic tương ứng với đối tượng hoặc lớp mà nó thuộc về. Với ảnh kích thước $H \times W$, mô hình cần dự đoán nhãn cho tất cả $H \times W$ pixel, cho phép hiểu cấu trúc ngữ nghĩa của toàn bộ cảnh.
+
+So với các bài toán khác trong computer vision, semantic segmentation khó hơn vì mô hình phải vừa nhận diện đối tượng vừa xác định chính xác ranh giới giữa các vùng. Do đó, các mô hình semantic segmentation thường cần khai thác cả \textbf{local features} và \textbf{global context} của ảnh.
+
+\section{Phạm vi khảo sát}
+
+Trong những năm gần đây, nhiều phương pháp semantic segmentation đã được đề xuất. Các hướng tiếp cận có thể được phân loại thành:
+\begin{itemize}
+\item các phương pháp segmentation truyền thống;
+\item các mô hình dựa trên convolutional neural networks;
+\item các phương pháp hiện đại dựa trên transformer.
+\end{itemize}
+
+Khảo sát này tập trung tổng hợp và phân tích các hướng tiếp cận trong semantic segmentation, đặc biệt tìm hiểu các phương pháp nổi bật trong bài toán phân đoạn ngữ nghĩa trong camera hành trình. So sánh các mô hình, các tập dataset phù hợp. Cuối cùng là tìm được Khoảng trống nghiên cứu.

@@ -1,0 +1,139 @@
+\section{Phân đoạn ngữ nghĩa dựa trên Transformer}
+
+\subsection{Nguyên lý và phương pháp}
+
+Kiến trúc Transformer ban đầu được đề xuất cho các bài toán mô hình hóa chuỗi trong xử lý ngôn ngữ tự nhiên và sau đó được mở rộng sang các bài toán thị giác máy tính \cite{vaswani2017attention}. 
+Thành phần cốt lõi của Transformer là cơ chế \textit{self-attention}, cho phép mô hình học được các mối quan hệ phụ thuộc dài hạn giữa các phần tử trong dữ liệu đầu vào.
+
+Cho một chuỗi đặc trưng đầu vào $X \in \mathbb{R}^{N \times d}$, cơ chế attention xây dựng mối quan hệ giữa các token thông qua ba phép biến đổi tuyến tính: truy vấn (query), khóa (key) và giá trị (value):
+
+\begin{equation}
+Q = XW_Q,\quad K = XW_K,\quad V = XW_V
+\end{equation}
+
+Trong đó $W_Q$, $W_K$ và $W_V$ là các ma trận trọng số được học trong quá trình huấn luyện.
+
+Cơ chế \textit{scaled dot-product attention} được định nghĩa như sau:
+
+\begin{equation}
+Attention(Q,K,V) = softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+\end{equation}
+
+Trong đó $d_k$ là số chiều của vector key và được sử dụng để chuẩn hóa nhằm ổn định quá trình huấn luyện. 
+Cơ chế này cho phép mỗi token có thể tương tác với toàn bộ các token còn lại trong chuỗi đầu vào, từ đó mô hình có khả năng khai thác thông tin ngữ cảnh toàn cục \cite{vaswani2017attention}.
+
+Trong thị giác máy tính, ảnh đầu vào trước hết được chia thành các khối nhỏ (patch). 
+Mô hình \textit{Vision Transformer (ViT)} xem mỗi patch như một token trong chuỗi và đưa chúng vào bộ mã hóa Transformer để học các quan hệ toàn cục giữa các vùng ảnh \cite{dosovitskiy2020image}.
+
+Đối với bài toán phân đoạn ngữ nghĩa, các kiến trúc dựa trên Transformer thường tuân theo quy trình gồm ba giai đoạn chính:
+
+\begin{enumerate}
+
+\item \textbf{Patch Embedding}
+
+Ảnh đầu vào $I \in \mathbb{R}^{H \times W \times C}$ được chia thành các patch không chồng lấp có kích thước $P \times P$. 
+Mỗi patch sau đó được làm phẳng (flatten) và ánh xạ vào một vector đặc trưng trong không gian embedding.
+
+\item \textbf{Transformer Encoder}
+
+Chuỗi các vector embedding được đưa vào bộ mã hóa Transformer, bao gồm nhiều lớp \textit{multi-head self-attention} và các mạng \textit{feed-forward}. 
+Các lớp này cho phép mô hình học được các quan hệ phụ thuộc dài hạn giữa các vùng ảnh, từ đó khai thác hiệu quả thông tin ngữ cảnh toàn cục.
+
+\item \textbf{Segmentation Decoder}
+
+Bộ giải mã (decoder) có nhiệm vụ tái tạo dự đoán ở mức pixel từ các đặc trưng đã được mã hóa. 
+Giai đoạn này thường bao gồm các phép nội suy (upsampling) hoặc các cơ chế kết hợp đặc trưng đa tỉ lệ để tạo ra bản đồ phân đoạn cuối cùng.
+
+\end{enumerate}
+
+Nhiều kiến trúc phân đoạn ngữ nghĩa dựa trên Transformer đã được đề xuất, tiêu biểu như Vision Transformer (ViT), Swin Transformer, Segmenter và SegFormer \cite{dosovitskiy2020image,liu2021swin,xie2021segformer,strudel2021segmenter}. 
+Các mô hình này cho thấy hiệu năng cao trong các bài toán dự đoán dày đặc (dense prediction) nhờ khả năng mô hình hóa quan hệ ngữ cảnh toàn cục.
+
+\subsection{Tập dữ liệu cho phân đoạn ngữ nghĩa dựa trên Transformer}
+
+Các mô hình phân đoạn ngữ nghĩa thường được đánh giá trên các tập dữ liệu có gán nhãn ở mức pixel. 
+Những tập dữ liệu này đóng vai trò quan trọng trong việc huấn luyện và so sánh hiệu năng giữa các mô hình.
+
+\textbf{Cityscapes}
+
+Tập dữ liệu Cityscapes được xây dựng nhằm phục vụ bài toán hiểu cảnh đô thị trong các hệ thống xe tự hành \cite{cordts2016cityscapes}. 
+Tập dữ liệu bao gồm khoảng 5000 ảnh được gán nhãn chi tiết và 20000 ảnh được gán nhãn thô, với độ phân giải $1024 \times 2048$.
+
+Cityscapes bao gồm 19 lớp ngữ nghĩa khác nhau, chẳng hạn như đường, phương tiện giao thông, người đi bộ và biển báo giao thông. 
+Một thách thức quan trọng của tập dữ liệu này là sự tồn tại của các đối tượng nhỏ và các biên phân đoạn phức tạp, đòi hỏi mô hình phải đồng thời khai thác được cả thông tin cục bộ và ngữ cảnh toàn cục.
+
+\textbf{ADE20K}
+
+ADE20K là một tập dữ liệu phổ biến trong bài toán phân tích cảnh (scene parsing), bao gồm hơn 25.000 ảnh với 150 lớp ngữ nghĩa \cite{zhou2017scene}. 
+Tập dữ liệu này chứa nhiều loại cảnh khác nhau, bao gồm cả môi trường trong nhà và ngoài trời, do đó thường được sử dụng để đánh giá khả năng tổng quát hóa của các mô hình phân đoạn.
+
+Các kiến trúc dựa trên Transformer thường đạt hiệu năng tốt trên ADE20K do cơ chế attention cho phép mô hình học được các mối quan hệ phức tạp giữa nhiều đối tượng trong cùng một cảnh.
+
+\textbf{PASCAL VOC 2012}
+
+PASCAL VOC là một tập dữ liệu chuẩn được sử dụng rộng rãi trong nghiên cứu thị giác máy tính \cite{everingham2010pascal}. 
+Tập dữ liệu này bao gồm khoảng 20 lớp đối tượng với gán nhãn ở mức pixel.
+
+Mặc dù quy mô nhỏ hơn so với các tập dữ liệu hiện đại, PASCAL VOC vẫn được sử dụng phổ biến để đánh giá và so sánh các thuật toán phân đoạn ngữ nghĩa.
+
+\subsection{Các thước đo đánh giá}
+
+Để đánh giá hiệu năng của các mô hình phân đoạn ngữ nghĩa, nhiều thước đo dựa trên mức pixel được sử dụng.
+
+\textbf{Pixel Accuracy (PA)}
+
+Pixel Accuracy đo tỷ lệ số pixel được phân loại đúng trên tổng số pixel của ảnh:
+
+\begin{equation}
+PA = \frac{\sum_i n_{ii}}{\sum_i t_i}
+\end{equation}
+
+Trong đó $n_{ii}$ là số pixel của lớp $i$ được dự đoán đúng và $t_i$ là tổng số pixel thuộc lớp $i$.
+
+\textbf{Intersection over Union (IoU)}
+
+Intersection over Union đo mức độ chồng lấp giữa kết quả dự đoán và nhãn chuẩn:
+
+\begin{equation}
+IoU = \frac{TP}{TP + FP + FN}
+\end{equation}
+
+Trong đó $TP$ là số dự đoán đúng, $FP$ là số dự đoán sai dương và $FN$ là số mẫu bị bỏ sót.
+
+\textbf{Mean Intersection over Union (mIoU)}
+
+Mean IoU là giá trị trung bình của IoU trên tất cả các lớp:
+
+\begin{equation}
+mIoU = \frac{1}{K}\sum_{k=1}^{K} IoU_k
+\end{equation}
+
+Trong đó $K$ là số lớp ngữ nghĩa. 
+mIoU được xem là thước đo tiêu chuẩn trong hầu hết các benchmark về phân đoạn ngữ nghĩa.
+
+\subsection{Khoảng trống nghiên cứu}
+
+Mặc dù các mô hình phân đoạn dựa trên Transformer đạt được nhiều thành tựu đáng kể, vẫn tồn tại một số hạn chế cần được giải quyết.
+
+\begin{itemize}
+
+\item \textbf{Độ phức tạp tính toán}
+
+Cơ chế self-attention có độ phức tạp bậc hai theo số lượng token đầu vào. 
+Điều này dẫn đến chi phí tính toán cao khi xử lý các ảnh có độ phân giải lớn.
+
+\item \textbf{Yêu cầu dữ liệu lớn}
+
+Các mô hình Transformer thường cần lượng dữ liệu huấn luyện lớn để đạt hiệu năng tối ưu do thiếu các \textit{inductive bias} vốn có trong mạng nơ-ron tích chập.
+
+\item \textbf{Độ chính xác biên phân đoạn}
+
+Mặc dù Transformer có khả năng mô hình hóa ngữ cảnh toàn cục hiệu quả, chúng đôi khi gặp khó khăn trong việc bảo toàn các chi tiết không gian tinh vi, dẫn đến sai lệch tại các vùng biên đối tượng.
+
+\item \textbf{Tiêu thụ bộ nhớ}
+
+Các mô hình Transformer lớn yêu cầu dung lượng bộ nhớ GPU đáng kể, điều này hạn chế khả năng triển khai trong các hệ thống thời gian thực hoặc các môi trường có tài nguyên tính toán hạn chế.
+
+\end{itemize}
+
+Các hướng nghiên cứu trong tương lai bao gồm việc phát triển các kiến trúc Transformer nhẹ hơn, cải thiện hiệu quả sử dụng dữ liệu, cũng như kết hợp các đặc tính quy nạp của mạng tích chập với cơ chế attention của Transformer \cite{xie2021segformer,liu2021swin}.
