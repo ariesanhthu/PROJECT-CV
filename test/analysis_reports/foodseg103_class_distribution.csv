@@ -4,35 +4,35 @@ carrot,1172,1172
 chicken duck,1124,1124
 sauce,1051,1051
 tomato,1034,1034
-potato,1000,1000
+potato,1001,1001
 steak,983,983
 broccoli,935,935
 ice cream,790,790
 cilantro mint,769,769
 citrus,738,724
 alliums_and_garlic,700,660
-desserts,697,652
-leafy_greens,693,678
-beans_and_peas,674,660
+leafy_greens,694,679
+beans_and_peas,675,661
 rice,611,611
-pork,588,588
+pork,589,589
 strawberry,514,514
 pie,494,494
 cucumber,492,492
-corn,453,453
+corn,454,454
+cake,387,387
 pepper,381,381
-cheese butter,332,332
+cheese butter,333,333
 fish,316,316
 egg,258,258
-mushroom,238,234
 asparagus,233,233
+biscuit,225,225
 fried meat,222,222
 french fries,222,222
 noodles,217,217
 cauliflower,213,213
 celery stick,209,209
-other ingredients,206,206
 sausage,205,205
+other ingredients,198,198
 blueberry,190,190
 cherry,183,183
 coffee,156,156
@@ -41,16 +41,19 @@ juice,146,146
 grape,144,144
 banana,136,136
 apple,134,134
-shrimp,115,115
+white button mushroom,119,119
+shrimp,116,116
+shiitake,104,104
 wine,104,104
 nut,94,92
 lamb,85,85
 milkshake,81,81
 soup,79,79
 pineapple,67,67
-avocado,65,65
+avocado,66,66
 raspberry,64,64
 pizza,56,56
+chocolate,55,55
 milk,53,53
 pumpkin,47,47
 kiwi,45,45
@@ -59,18 +62,27 @@ white radish,40,40
 peach,32,32
 mango,30,30
 pear,28,28
-hanamaki baozi,27,27
 tofu,27,27
+hanamaki baozi,27,27
 shellfish,24,24
 tea,23,23
 melon,21,21
 salad,20,20
 dried cranberries,18,18
+candy,17,17
 eggplant,17,17
-wonton dumplings,16,16
 watermelon,16,16
+wonton dumplings,16,16
 crab,13,13
-apricot,10,10
 fig,10,10
+apricot,10,10
 seaweed,7,7
+king oyster mushroom,7,7
 hamburg,6,6
+pudding,5,5
+oyster mushroom,5,5
+date,5,5
+popcorn,4,4
+egg tart,4,4
+bamboo shoots,3,3
+enoki mushroom,3,3
