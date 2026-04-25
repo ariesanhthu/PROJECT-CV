@@ -1,0 +1,22 @@
+\section{So sánh với các baseline khác}
+
+Để đặt kết quả vào bối cảnh chung, Bảng \ref{tab:baseline-comparison} so sánh một số cấu hình baseline phổ biến theo cùng hai chỉ số \texttt{mIoU} và \texttt{mAcc}.
+
+\begin{table}[H]
+    \centering
+    \caption{So sánh với các baseline segmentation khác.}
+    \label{tab:baseline-comparison}
+    \footnotesize
+    \resizebox{\columnwidth}{!}{%
+    \begin{tabular}{llllrr}
+        \toprule
+        \textbf{Encoder} & \textbf{Decoder} & \textbf{Crop Size} & \textbf{Batch Size} & \textbf{mIoU} & \textbf{mAcc} \\
+        \midrule
+        R-50 & CCNet & 512x1024 & 8 & 35.5 & 45.3 \\
+        ReLeM-R-50 & CCNet & 512x1024 & 8 & 36.8 & 47.4 \\
+        ViT-16/B & MLA & 768x768 & 4 & 45.1 & 57.4 \\
+        \bottomrule
+    \end{tabular}}
+\end{table}
+
+

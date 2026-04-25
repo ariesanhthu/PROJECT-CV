@@ -20,8 +20,17 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning}
 \graphicspath{{./}{../foodseg103_analysis_vi/figures/}}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{2pt}
+\setlength{\abovedisplayshortskip}{2pt}
+\setlength{\belowdisplayshortskip}{3pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\renewcommand{\abstractname}{Tóm tắt}
+\renewcommand{\IEEEkeywordsname}{Từ khóa}
 \begin{document}
 
 \title{Texture-Aware Lightweight Semantic Segmentation
@@ -47,12 +56,17 @@ for Fine-Grained Food Images}
 \end{IEEEkeywords}
 
 
-\input{sections/introduction}
-\input{sections/khaosat}
+\input{sections/1-introduction}
+\input{sections/2-khaosat}
 \input{sections/data_analysis_preprocessing}
+% \input{sections/phantich.tex}
 % \input{sections/baseline_model_pipeline}
-\input{sections/phuongphap.tex}
-\input{sections/thucnghiem.tex}
+\input{sections/3-phuongphap.tex}
+\input{sections/4-thucnghiem.tex}
+\input{sections/5-phantich.tex}
+\input{sections/6-caitien.tex}
+\input{sections/canbangdulieu.tex}
+\input{sections/7-sosanh.tex}
 \input{sections/conclusion}
 
 % \section*{Lời cảm ơn}
