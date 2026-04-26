@@ -3,33 +3,37 @@
 % ============================================================
 \section{Phương pháp}
 
-\begin{frame}{III-A. Mục tiêu baseline}
+\begin{frame}{III-A. Mục tiêu và phạm vi baseline}
   \begin{block}{Tại sao chọn BiSeNet?}
-    Kiến trúc lightweight kinh điển, tách riêng spatial detail và semantic context $\to$ phù hợp để phân tích mất mát local detail trên thực phẩm fine-grained
+    Kiến trúc lightweight kinh điển, tách riêng spatial detail và semantic context $\to$ phù hợp để phân tích mất mát local detail trên thực phẩm fine-grained \cite{bisenet}
   \end{block}
-  \vspace{0.4em}
+  \vspace{0.3em}
   \textbf{Ba mục tiêu thiết lập baseline}
   \begin{enumerate}
-    \item \textbf{Mốc hiệu năng}: điểm tham chiếu rõ ràng về độ chính xác và chi phí tính toán
+    \item \textbf{Mốc hiệu năng}: điểm tham chiếu rõ ràng trên không gian nhãn gốc 103 lớp
     \item \textbf{Kiểm tra giới hạn}: BiSeNet suy giảm ra sao với ranh giới yếu và texture phức tạp
     \item \textbf{Chuẩn hóa pipeline}: quy trình huấn luyện/đánh giá đồng nhất để so sánh công bằng
   \end{enumerate}
+  \vspace{0.3em}
+  % \begin{alertblock}{Phạm vi}
+  %   Baseline được huấn luyện \textbf{trực tiếp} trên \texttt{FoodSeg103} nguyên thủy (103 lớp), \textbf{không} áp dụng bất kỳ bước gộp hoặc tái cấu trúc nhãn nào. Thực nghiệm tái cấu trúc nhãn (103 $\to$ 75 lớp) là nhánh phân tích \textbf{bổ sung độc lập}, thực hiện sau khi baseline đã hoàn tất.
+  % \end{alertblock}
 \end{frame}
 
 \begin{frame}{III-B. Kiến trúc BiSeNet}
   \begin{columns}
-    \column{0.52\textwidth}
+    \column{0.4\textwidth}
       \begin{itemize}
         \item \textbf{Spatial Path}: 3 conv stride-2 $\to$ $\frac{1}{8}$ ảnh gốc, bảo toàn chi tiết cạnh và texture
         \item \textbf{Context Path}: Xception39 + GAP $\to$ trường thụ cảm rộng
         \item \textbf{ARM}: channel-wise attention tinh lọc đặc trưng context
         \item \textbf{FFM}: nối hai luồng + SE-like reweighting
       \end{itemize}
-    \column{0.45\textwidth}
+    \column{0.59\textwidth}
       \begin{figure}
         \centering
         \includegraphics[width=\linewidth]{img/report/BiSeNET-architecture.jpg}
-        \caption{Kiến trúc BiSeNet}
+        % \caption{Kiến trúc BiSeNet}
       \end{figure}
   \end{columns}
 \end{frame}
@@ -50,7 +54,7 @@
         \item Mục tiêu: tăng ổn định gradient và cải thiện học đặc trưng ở tầng trung gian.
       \end{itemize}
     % \column{0.38\textwidth}
-      \begin{block}{Vì sao chọn CE?}
+      \begin{block}{Vì sao chọn Cross-Entropy?}
         \begin{itemize}
           \item đơn giản, ổn định
           \item dễ tái lập kết quả

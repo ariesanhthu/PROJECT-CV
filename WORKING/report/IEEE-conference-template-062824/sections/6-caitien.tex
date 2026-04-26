@@ -139,3 +139,69 @@ Boundary-aware Supervision
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{Kết quả}
+
+Hình~\ref{fig:gnn-prior-analysis} trình bày prior đồ thị được xây dựng từ thống kê đồng xuất hiện và tiếp xúc biên giữa các lớp nguyên liệu. Đồ thị các cạnh mạnh cho thấy một số lớp \textit{head} như \texttt{bread}, \texttt{chicken duck}, \texttt{tomato}, \texttt{potato} và \texttt{broccoli} đóng vai trò nút liên kết với nhiều lớp \textit{medium}; điều này phù hợp với giả thuyết rằng lỗi phân đoạn không độc lập theo từng lớp mà có cấu trúc theo ngữ cảnh món ăn. Heatmap thành phần đồng xuất hiện cũng cho thấy các cụm quan hệ có cường độ cao, cung cấp tín hiệu prior để Relation GNN điều chỉnh logits theo các lớp thường xuất hiện cùng nhau hoặc nằm sát nhau trên ảnh.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/caitien/plot/08_gnn_prior_top_edges_network.png}
+        \caption{Các quan hệ lớp mạnh nhất trong prior GNN.}
+        \label{fig:gnn-prior-network}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/caitien/plot/09_gnn_prior_components_heatmap.png}
+        \caption{Heatmap thành phần đồng xuất hiện.}
+        \label{fig:gnn-prior-heatmap}
+    \end{subfigure}
+    \caption{Phân tích prior đồ thị lớp dùng cho Relation GNN.}
+    \label{fig:gnn-prior-analysis}
+\end{figure}
+
+Hình~\ref{fig:rtb-training-curves} cho thấy mô hình RTB/GNN hội tụ ổn định trong quá trình huấn luyện. Loss huấn luyện giảm đều từ giai đoạn đầu đến cuối, trong khi validation loss giảm nhanh và ổn định quanh vùng thấp sau khoảng 60 epoch; checkpoint tốt nhất theo validation loss nằm ở epoch 129. Các chỉ số validation tăng cùng chiều với quá trình giảm loss, trong đó \texttt{mIoU} và \texttt{mAcc} đạt tốt nhất ở epoch 141, còn \texttt{aAcc} đạt tốt nhất ở epoch 129. Xu hướng này cho thấy các thành phần texture, boundary và prior GNN giúp mô hình cải thiện không chỉ độ chính xác toàn cục mà còn cả khả năng phân biệt trung bình theo lớp.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/caitien/plot/rtb_best_loss.png}
+        \caption{Train loss và validation loss.}
+        \label{fig:rtb-best-loss}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/caitien/plot/rtb_best_metrics.png}
+        \caption{Các chỉ số validation theo epoch.}
+        \label{fig:rtb-best-metrics}
+    \end{subfigure}
+    \caption{Diễn biến huấn luyện và đánh giá validation của mô hình RTB/GNN.}
+    \label{fig:rtb-training-curves}
+\end{figure}
+
+Hình~\ref{fig:rtb-comparison-presence} so sánh checkpoint tốt nhất của mô hình đề xuất với các baseline và phân tích lỗi hiện diện lớp. Ở checkpoint tốt nhất, RTB/GNN đạt \texttt{mIoU} $59.9\%$, \texttt{mAcc} $71.7\%$ và \texttt{aAcc} $85.4\%$, cao hơn rõ rệt so với CCNet và BiSeNetV1 trên cả ba chỉ số. Phân tích presence cho thấy mô hình ban đầu chủ yếu tạo lỗi dương giả, trong khi các checkpoint sau giảm mạnh lỗi này; checkpoint tốt nhất theo presence đạt độ chính xác hiện diện $100\%$, còn checkpoint tốt nhất theo \texttt{mIoU} đạt $87.5\%$. Điều này cho thấy prior GNN và các ràng buộc bổ sung giúp mô hình kiểm soát tốt hơn việc dự đoán lớp có/không xuất hiện, qua đó giảm hiện tượng dự đoán lan sang các lớp không có trong ảnh.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/caitien/plot/best-comparison-metric.png}
+        \caption{So sánh chỉ số với các baseline.}
+        \label{fig:rtb-best-comparison}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/caitien/plot/presence error.png}
+        \caption{Phân tích lỗi hiện diện lớp.}
+        \label{fig:rtb-presence-error}
+    \end{subfigure}
+    \caption{So sánh hiệu năng và phân tích lỗi presence của mô hình RTB/GNN.}
+    \label{fig:rtb-comparison-presence}
+\end{figure}
+
