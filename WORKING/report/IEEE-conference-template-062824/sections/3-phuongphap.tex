@@ -2,17 +2,19 @@
 
 
 
-\subsection{Mục tiêu baseline}
-Phần baseline được xây dựng nhằm thiết lập một mốc tham chiếu hiệu năng cho bài toán phân vùng đa lớp thực phẩm trên bộ dữ liệu \texttt{FoodSeg103} nguyên thủy (103 lớp). BiSeNet (Bilateral Segmentation Network) được chọn vì đây là một kiến trúc lightweight kinh điển có chủ đích tách riêng đường đi của chi tiết không gian và ngữ cảnh ngữ nghĩa, từ đó phù hợp để làm mốc so sánh cho các cải tiến texture-aware trong giai đoạn sau.
+\subsection{Mục tiêu và phạm vi baseline}
+Phần baseline được xây dựng nhằm thiết lập một mốc tham chiếu hiệu năng cho bài toán phân vùng đa lớp thực phẩm trên bộ dữ liệu \texttt{FoodSeg103} \emph{nguyên thủy} (103 lớp). Baseline không áp dụng bất kỳ bước tái cấu trúc hay tái cân bằng nhãn nào; toàn bộ dữ liệu huấn luyện sử dụng là phân vùng gốc 103 lớp của tập train được cung cấp sẵn.
 
-Việc thiết lập baseline với BiSeNet tập trung vào ba mục tiêu:
+BiSeNet (Bilateral Segmentation Network) được chọn vì đây là một kiến trúc lightweight kinh điển có chủ đích tách riêng đường đi của chi tiết không gian và ngữ cảnh ngữ nghĩa, từ đó phù hợp để làm mốc so sánh cho các cải tiến texture-aware trong giai đoạn sau \cite{bisenet}.
+
+Việc thiết lập baseline tập trung vào ba mục tiêu:
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Thiết lập mốc hiệu năng}: tạo một điểm tham chiếu rõ ràng về độ chính xác và chi phí tính toán trên không gian nhãn gốc của bài toán.
+    \item \textbf{Thiết lập mốc hiệu năng}: tạo một điểm tham chiếu rõ ràng về độ chính xác và chi phí tính toán trên không gian nhãn gốc 103 lớp.
     \item \textbf{Kiểm tra giới hạn của mô hình nhẹ}: đánh giá xem một kiến trúc thời gian thực như BiSeNet suy giảm ra sao trên bài toán ingredient-level có ranh giới yếu và texture phức tạp.
     \item \textbf{Chuẩn hóa pipeline}: định nghĩa quy trình huấn luyện và đánh giá đồng nhất để làm cơ sở so sánh công bằng cho các mô-đun texture-aware hoặc boundary-aware ở bước tiếp theo.
 \end{itemize}
 
-Trong nghiên cứu này, thực nghiệm tái cấu trúc nhãn (103 xuống 75) được tách thành nhánh phân tích mở rộng ở phần sau; nhánh đó không thay thế baseline chính trên dữ liệu nguyên thủy.
+Lưu ý về phạm vi: thực nghiệm tái cấu trúc nhãn (103 xuống 75 lớp) là một nhánh phân tích hoàn toàn độc lập, được thực hiện \emph{sau} khi baseline đã được train và đánh giá trên dữ liệu gốc; nhánh này được trình bày ở Phần~\ref{subsec:extended_rebalanced_experiment} và không thay thế baseline chính.
 
 \subsection{Kiến trúc chi tiết của BiSeNet baseline}
 Theo đề xuất của Changqian Yu và cộng sự, BiSeNet được cấu thành từ hai thành phần chính nhằm giải quyết hai yêu cầu mâu thuẫn trong phân vùng ngữ nghĩa: bảo toàn chi tiết không gian và mở rộng trường thụ cảm \cite{bisenet}. Đây cũng chính là lý do mô hình được chọn cho nghiên cứu hiện tại: nó đủ nhẹ để đại diện cho ràng buộc triển khai, nhưng vẫn có sẵn cấu trúc cho phép phân tích phần mất mát local detail.

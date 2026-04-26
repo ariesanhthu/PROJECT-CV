@@ -3,16 +3,20 @@
 % ============================================================
 \section{Thực nghiệm}
 
-\begin{frame}{IV-A. Thiết lập huấn luyện}
+\begin{frame}{IV-A. Thiết lập huấn luyện baseline}
+  \begin{block}{Dữ liệu huấn luyện: \texttt{FoodSeg103} nguyên thủy (103 lớp)}
+    Baseline giữ nguyên không gian nhãn 103 lớp.
+  \end{block}
+  \vspace{2em}
   \begin{itemize}
     \item Tập test: 2.135 ảnh --- giữ nguyên để đánh giá cuối cùng
-    \item Từ tập train gốc của FoodSeg103: chia train/val theo tỉ lệ 90/10
-    \item Ba vai trò tách biệt: \texttt{train} (tối ưu) $|$ \texttt{val} (theo dõi hội tụ) $|$ \texttt{test} (đánh giá độc lập)
+    \item Từ tập train gốc: chia train/val theo tỉ lệ 90/10 (fixed \texttt{random\_state})
+    \item Ba vai trò tách biệt: \texttt{train} (tối ưu) $|$ \texttt{val} (theo dõi hội tụ) $|$ \texttt{test} (độc lập)
   \end{itemize}
-  \vspace{0.5em}
-  \begin{block}{Dữ liệu huấn luyện baseline: \texttt{FoodSeg103} nguyên thủy}
-    Baseline giữ nguyên không gian nhãn 103 lớp, không áp dụng gộp lớp trong thiết lập chính.
-  \end{block}
+  \vspace{0.4em}
+  % \begin{alertblock}{Lưu ý về \texttt{FoodSeg103\_rebalanced}}
+  %   Phiên bản 75 lớp (rebalanced) \textbf{không} được dùng để huấn luyện baseline. Đây là nhánh thực nghiệm bổ sung độc lập, được thực hiện \emph{sau} khi baseline đã được train và đánh giá xong trên dữ liệu gốc, nhằm phân tích thêm ảnh hưởng của phân mảnh nhãn.
+  % \end{alertblock}
 \end{frame}
 
 \begin{frame}{IV-B. Kết quả}
@@ -43,13 +47,13 @@
 
 \begin{frame}{IV-B. Mẫu dự đoán}
   \begin{columns}
-    \column{0.55\textwidth}
+    \column{0.4\textwidth}
       \begin{figure}
         \centering
         \includegraphics[width=\linewidth]{img/report/analyze/eval-model/07_best_cases.png}
         \caption{Các trường hợp dự đoán tốt nhất}
       \end{figure}
-    \column{0.42\textwidth}
+    \column{0.49\textwidth}
       \begin{figure}
         \centering
         \includegraphics[width=\linewidth]{img/report/outputs/predict-problem.jpg}
@@ -64,28 +68,29 @@
     \column{0.5\textwidth}
       \begin{figure}
         \centering
-        \includegraphics[width=\linewidth]{img/report/analyze/eval-model/03_pixel_acc_vs_present_miou_improved.png}
+        \includegraphics[width=0.8\linewidth]{img/report/analyze/eval-model/03_pixel_acc_vs_present_miou_improved.png}
         \caption{Pixel accuracy và present-class mIoU}
       \end{figure}
-    \column{0.47\textwidth}
+    \column{0.49\textwidth}
       \begin{itemize}
         \item Pixel acc $0.3$--$0.6$ nhưng mIoU vẫn $<0.3$
         \item Pixel acc không nhạy với lỗi lớp nhỏ và vùng biên
         \item mIoU phạt đồng thời $FP$ và $FN$
         \item Điểm yếu: \textbf{định vị} sai vùng nguyên liệu, không chỉ nhận diện sai lớp
       \end{itemize}
+      \vspace{2em}
   \end{columns}
 \end{frame}
 
 \begin{frame}{IV-C. Phân tích lỗi --- Sink class \& Confusion Matrix}
   \begin{columns}
-    \column{0.5\textwidth}
+    \column{0.4\textwidth}
       \begin{figure}
         \centering
         \includegraphics[width=\linewidth]{img/report/analyze/eval-model/05_top_sink_classes_improved.png}
         \caption{Sink classes thu hút false-positive}
       \end{figure}
-    \column{0.5\textwidth}
+    \column{0.4\textwidth}
       \begin{figure}
         \centering
         \includegraphics[width=\linewidth]{img/report/analyze/eval-model/04_top_confusion_directions_improved.png}
@@ -96,16 +101,16 @@
 
 \begin{frame}{IV-C. Nhận xét lỗi có cấu trúc}
   \begin{alertblock}{Hiện tượng Sink Class}
-    \textbf{chicken duck} thu hút $\approx$458M pixel FP. pie (58.5\%), pork (57.9\%), bread (56.2\%), steak (55.6\%) đều bị kéo về lớp này
+    \textbf{chicken duck} chiếm $\approx$458M pixel False Positive. Các lớp tương đồng về vân như (58.5\%), pork (57.9\%), bread (56.2\%), steak (55.6\%) đều bị dự đoán sai thành lớp trên.
   \end{alertblock}
   \vspace{0.3em}
-  \textbf{Nhầm lẫn có ý nghĩa thị giác}
+  \textbf{Nhầm lẫn dựa trên đặc điểm thị giác}
   \begin{itemize}
     \item rice $\leftrightarrow$ potato (21.9\% / 20.1\%)
     \item steak $\to$ sausage (27.0\%), broccoli $\to$ sausage (27.6\%)
   \end{itemize}
   \vspace{0.3em}
   \begin{block}{Kết luận}
-    Lỗi \textbf{không ngẫu nhiên}: do tương đồng texture + quan hệ đồng xuất hiện. Spatial Path chưa đủ để phân biệt fine-grained texture.
+    Lỗi \textbf{không ngẫu nhiên}: do tương đồng về vân và quan hệ tương đồng xuất hiện. Spatial Path chưa đủ để phân biệt fine-grained texture.
   \end{block}
 \end{frame}

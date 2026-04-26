@@ -8,7 +8,7 @@
     \column{0.5\textwidth}
       \begin{figure}
         \centering
-        \includegraphics[width=\linewidth]{img/report/analyze/eval-model/01_class_severity_score_improved.png}
+        \includegraphics[width=0.6\linewidth]{img/report/analyze/eval-model/01_class_severity_score_improved.png}
         \caption{Top lớp có điểm severity cao}
       \end{figure}
     \column{0.5\textwidth}
@@ -31,7 +31,7 @@
         \item Chưa có giám sát tường minh tại vùng biên
       \end{enumerate}
       \vspace{0.3em}
-      $\Rightarrow$ Ba module bổ sung \textbf{nhẹ}, không thay đổi cấu trúc BiSeNet cơ bản
+      $\Rightarrow$ BiSeNet đề xuất với 3 thành phần mở rộng. Ba module bổ sung \textbf{nhẹ}, không thay đổi cấu trúc BiSeNet cơ bản
     \column{0.47\textwidth}
       \begin{figure}
         \centering
@@ -42,8 +42,8 @@
 \end{frame}
 
 \begin{frame}{V-B.1 Texture-aware Branch}
-  \begin{columns}
-    \column{0.55\textwidth}
+  % \begin{columns}
+    % \column{0.55\textwidth}
       Từ đặc trưng không gian $F_{sp}$:
       \begin{align*}
         T &= \phi_\text{tex}(F_{sp}) \\
@@ -53,11 +53,11 @@
         \item Trích xuất: cạnh nhỏ, tương phản cục bộ, cấu trúc bề mặt
         \item $F_{sp}^\text{tex}$ đưa vào FFM cùng Context Path
       \end{itemize}
-    \column{0.42\textwidth}
+    % \column{0.42\textwidth}
       \begin{block}{Lỗi nhắm đến}
         Nhầm lẫn các lớp có bề mặt gần giống: thịt, bánh, sốt, rau chế biến
       \end{block}
-  \end{columns}
+  % \end{columns}
 \end{frame}
 
 \begin{frame}{V-B.2 Relation GNN Module}
@@ -77,8 +77,8 @@
 \end{frame}
 
 \begin{frame}{V-B.3 Boundary-aware Supervision}
-  \begin{columns}
-    \column{0.56\textwidth}
+  % \begin{columns}
+  %   \column{0.56\textwidth}
       Sinh bản đồ biên: $B = \text{Dilate}(S) - \text{Erode}(S)$
 
       Loss biên:
@@ -89,29 +89,27 @@
         \item Tập trung sửa lỗi \textbf{mask tràn} và \textbf{biên dính lớp}.
         \item Boundary Head chỉ dùng khi train nên không làm chậm inference.
       \end{itemize}
-    \column{0.4\textwidth}
+    % \column{0.4\textwidth}
       \begin{block}{Lợi ích kỳ vọng}
         \begin{itemize}
           \item tăng IoU cho lớp mỏng/nhỏ
           \item giảm false positive quanh rìa món ăn
         \end{itemize}
       \end{block}
-  \end{columns}
+  % \end{columns}
 \end{frame}
 
 \begin{frame}{V-B.4 Loss tổng và vai trò từng module}
-  \begin{columns}
-    \column{0.5\textwidth}
+  % \begin{columns}
+  %   \column{0.5\textwidth}
       \[
         L_\text{total} = L_\text{seg} + \lambda_e L_\text{edge} + \lambda_{ba} L_\text{ba} + \lambda_r L_\text{rel}
       \]
 
-      \begin{block}{Ý nghĩa thiết kế}
-        Mỗi hạng tử loss gắn với một nhóm lỗi đã quan sát trong baseline: texture, quan hệ lớp và vùng biên.
-      \end{block}
-    \column{0.46\textwidth}
+
+    % \column{0.46\textwidth}
       \begin{table}
-        \tiny
+        \large
         \begin{tabular}{p{0.28\linewidth}p{0.3\linewidth}p{0.28\linewidth}}
           \toprule
           \textbf{Module} & \textbf{Mục tiêu} & \textbf{Lỗi nhắm đến} \\
@@ -123,43 +121,9 @@
         \end{tabular}
         \caption{Tóm tắt 3 thành phần cải tiến}
       \end{table}
-  \end{columns}
+      %       \begin{block}{Ý nghĩa thiết kế}
+      %   Mỗi hạng tử loss gắn với một nhóm lỗi đã quan sát trong baseline: texture, quan hệ lớp và vùng biên.
+      % \end{block}
+  % \end{columns}
 \end{frame}
 
-\begin{frame}{V-C. Thực nghiệm mở rộng (ngoài baseline): Tái cấu trúc không gian nhãn}
-  \begin{columns}
-    \column{0.52\textwidth}
-      \textbf{Phương pháp gộp lớp (GLCM)}
-      \[
-        \mathrm{Sim}(i,j) = \frac{\mathbf{f}_i\cdot\mathbf{f}_j}{\|\mathbf{f}_i\|\|\mathbf{f}_j\|}
-      \]
-      Gộp khi: gần nghĩa \textbf{và} $\mathrm{Sim}\geq 0.85$
-      \vspace{0.3em}
-
-      {\scriptsize \textit{Lưu ý: phần này là nhánh mở rộng để phân tích thêm, không phải thiết lập baseline chính.}}
-
-      \begin{table}
-        \tiny
-        \begin{tabular}{lcc}
-          \toprule
-          & \textbf{Gốc} & \textbf{Rebalanced} \\
-          \midrule
-          Số lớp & 103 & \textbf{75} \\
-          Ảnh train & 3.982 & 3.981 \\
-          Ảnh test  & 2.135 & 2.135 \\
-          \bottomrule
-        \end{tabular}
-      \end{table}
-    \column{0.46\textwidth}
-      \begin{figure}
-        \centering
-        \includegraphics[width=0.85\linewidth]{img/report/analyze/bean_.png}
-        \caption{Cosine similarity GLCM (nhóm đậu)}
-      \end{figure}
-      \begin{figure}
-        \centering
-        \includegraphics[width=\linewidth]{img/report/analyze/graph_after.png}
-        \caption{Phân bố pixel sau tái cấu trúc}
-      \end{figure}
-  \end{columns}
-\end{frame}
