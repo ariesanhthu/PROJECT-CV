@@ -30,20 +30,24 @@
 \end{frame}
 
 \begin{frame}{Mức cải thiện so với baseline}
-  \begin{figure}
-    \centering
-    \includegraphics[width=0.5\linewidth]{img/report/caitien/plot/best-comparison-metric.png}
-    \caption{So sánh chỉ số với baseline}
-  \end{figure}
-  \vspace{-0.4em}
-  \begin{block}{Vì sao mIoU và mAcc tăng đáng kể?}
-    \footnotesize
-    So với cấu hình \textbf{TestSet} (\textbf{47.97 mIoU / 57.51 mAcc}), phiên bản \textbf{TestSet + Aug.}
-    đạt \textbf{59.9 mIoU / 71.7 mAcc}. Mức tăng này đến từ:
-    \begin{itemize}
-      \item \textit{Texture-aware Branch}: tách tốt lớp có texture gần nhau.
-      \item \textit{Relation GNN}: giảm nhầm lẫn có cấu trúc qua prior đồng xuất hiện/tiếp xúc.
-      \item \textit{Boundary-aware Supervision}: cải thiện vùng biên và lớp nhỏ.
-    \end{itemize}
-  \end{block}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Vì sao mIoU và mAcc tăng đáng kể?}
+        \footnotesize
+        Mức tăng này đến từ:
+        \begin{itemize}
+          \item \textit{Texture-aware Branch}: tách tốt lớp có texture gần nhau.
+          \item \textit{Relation GNN}: giảm nhầm lẫn có cấu trúc qua prior đồng xuất hiện/tiếp xúc.
+          \item \textit{Boundary-aware Supervision}: cải thiện vùng biên và lớp nhỏ.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{img/report/caitien/plot/best-comparison-metric.png}
+        \caption{So sánh chỉ số với baseline}
+      \end{figure}
+    \end{column}
+  \end{columns}
 \end{frame}
