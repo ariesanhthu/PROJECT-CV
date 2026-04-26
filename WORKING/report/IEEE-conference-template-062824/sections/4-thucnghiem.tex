@@ -3,7 +3,7 @@
 
 \subsection{Huấn luyện}
 
-Trong thiết lập thực nghiệm, tập \texttt{test} của bộ \texttt{FoodSeg103\_rebalanced} được giữ nguyên để làm tập đánh giá cuối cùng, gồm 2{,}135 ảnh. Từ 3{,}981 ảnh của tập \texttt{train} sau xử lý, dữ liệu được chia tiếp thành tập huấn luyện và tập kiểm định nội bộ theo tỉ lệ 90/10 bằng hàm \texttt{train\_test\_split} với \texttt{random\_state} cố định theo seed của thí nghiệm. Theo cấu hình này, mô hình được huấn luyện trên 3{,}582 ảnh và được theo dõi trên 399 ảnh validation. Cách chia này giúp tách rõ ba vai trò: \texttt{train} để tối ưu tham số, \texttt{validation} để theo dõi hội tụ và chọn checkpoint, còn \texttt{test} giữ nguyên như tập đánh giá độc lập.
+Trong thiết lập thực nghiệm baseline, tập \texttt{test} của bộ \texttt{FoodSeg103} được giữ nguyên để làm tập đánh giá cuối cùng, gồm 2{,}135 ảnh. Từ tập \texttt{train} gốc, dữ liệu được chia tiếp thành tập huấn luyện và tập kiểm định nội bộ theo tỉ lệ 90/10 bằng hàm \texttt{train\_test\_split} với \texttt{random\_state} cố định theo seed của thí nghiệm. Cách chia này giúp tách rõ ba vai trò: \texttt{train} để tối ưu tham số, \texttt{validation} để theo dõi hội tụ và chọn checkpoint, còn \texttt{test} giữ nguyên như tập đánh giá độc lập.
 
 % Bảng 1: Cấu hình huấn luyện
 \begin{table}[H]
@@ -34,7 +34,7 @@ Trong thiết lập thực nghiệm, tập \texttt{test} của bộ \texttt{Food
 
 \subsection{Kết quả}
 
-Hình \ref{fig:bisenet-train-val-loss} và Hình \ref{fig:bisenet-val-metrics} trình bày diễn biến huấn luyện của BiSeNet trên bộ \texttt{FoodSeg103\_rebalanced}. Loss huấn luyện và loss kiểm định cùng giảm theo epoch và dần ổn định ở giai đoạn cuối. Đồng thời, các chỉ số đánh giá trên tập validation (\texttt{mIoU}, \texttt{mAcc}, \texttt{aAcc}) tăng đều theo quá trình học, cho thấy mô hình hội tụ theo hướng tích cực.
+Hình \ref{fig:bisenet-train-val-loss} và Hình \ref{fig:bisenet-val-metrics} trình bày diễn biến huấn luyện của BiSeNet trên bộ \texttt{FoodSeg103} nguyên thủy. Loss huấn luyện và loss kiểm định cùng giảm theo epoch và dần ổn định ở giai đoạn cuối. Đồng thời, các chỉ số đánh giá trên tập validation (\texttt{mIoU}, \texttt{mAcc}, \texttt{aAcc}) tăng đều theo quá trình học, cho thấy mô hình hội tụ theo hướng tích cực.
 
 \begin{figure}[H]
     \centering
@@ -51,7 +51,7 @@ Hình \ref{fig:bisenet-train-val-loss} và Hình \ref{fig:bisenet-val-metrics} t
         \caption{Các chỉ số validation: \texttt{mIoU}, \texttt{mAcc}, \texttt{aAcc}.}
         \label{fig:bisenet-val-metrics}
     \end{subfigure}
-    \caption{Kết quả theo dõi quá trình huấn luyện BiSeNet trên \texttt{FoodSeg103\_rebalanced}.}
+    \caption{Kết quả theo dõi quá trình huấn luyện BiSeNet trên \texttt{FoodSeg103} nguyên thủy.}
 \end{figure}
 
 
@@ -88,5 +88,5 @@ Hình \ref{fig:bisenet-output-samples} minh họa một số kết quả dự đ
     \end{tabular}
 \end{table}
 
-Theo tiêu chí đã định nghĩa ở phần trước, \textbf{mIoU} vẫn là chỉ số đánh giá chính vì phản ánh trực tiếp mức giao nhau trên hợp giữa vùng dự đoán và ground truth ở cấp độ pixel. Kết quả trên tập kiểm định cho thấy mô hình đạt $\mathrm{mIoU}=0.35$, $\mathrm{mAcc}=0.41$ và $\mathrm{aAcc}=0.79$. So sánh tương quan giữa ba chỉ số cho thấy độ chính xác toàn cục vẫn cao hơn đáng kể so với các chỉ số trung bình theo lớp, phản ánh tác động của mất cân bằng lớp trong dữ liệu phân đoạn thực phẩm và dư địa cải thiện ở các lớp khó/hiếm.
+Theo tiêu chí đã định nghĩa ở phần trước, \textbf{mIoU} vẫn là chỉ số đánh giá chính vì phản ánh trực tiếp mức giao nhau trên hợp giữa vùng dự đoán và ground truth ở cấp độ pixel. Kết quả trên tập kiểm định cho thấy mô hình đạt $\mathrm{mIoU}=0.31$, $\mathrm{mAcc}=0.41$ và $\mathrm{aAcc}=0.79$. So sánh tương quan giữa ba chỉ số cho thấy độ chính xác toàn cục vẫn cao hơn đáng kể so với các chỉ số trung bình theo lớp, phản ánh tác động của mất cân bằng lớp trong dữ liệu phân đoạn thực phẩm và dư địa cải thiện ở các lớp khó/hiếm.
 

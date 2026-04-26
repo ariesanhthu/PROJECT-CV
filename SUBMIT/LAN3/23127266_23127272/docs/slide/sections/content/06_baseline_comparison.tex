@@ -1,0 +1,25 @@
+% ============================================================
+% VI. SO SÁNH VỚI CÁC BASELINE KHÁC
+% ============================================================
+\section{So sánh với các baseline khác}
+
+\begin{frame}{So sánh với các baseline khác}
+  \begin{table}
+    \begin{tabular}{llllrr}
+      \toprule
+      \textbf{Encoder} & \textbf{Decoder} & \textbf{Crop} & \textbf{BS} & \textbf{mIoU} & \textbf{mAcc} \\
+      \midrule
+      R-50       & CCNet & 512$\times$1024 & 8 & 35.5 & 45.3 \\
+      ReLeM-R-50 & CCNet & 512$\times$1024 & 8 & 36.8 & 47.4 \\
+      ViT-16/B   & MLA   & 768$\times$768  & 4 & 45.1 & 57.4 \\
+      \midrule
+      \textbf{BiSeNet (ours)} & \textbf{---} & \textbf{512$\times$512} & \textbf{8} & \textbf{31.0} & \textbf{41.0} \\
+      \bottomrule
+    \end{tabular}
+    \caption{So sánh baseline trên FoodSeg103}
+  \end{table}
+  \vspace{0.3em}
+  \begin{block}{Nhận xét}
+    BiSeNet nhẹ hơn đáng kể so với các mô hình đối chứng; trong báo cáo này baseline được thiết lập trực tiếp trên \texttt{FoodSeg103} nguyên thủy (103 lớp), thể hiện trade-off giữa hiệu quả và độ chính xác dưới ràng buộc lightweight
+  \end{block}
+\end{frame}

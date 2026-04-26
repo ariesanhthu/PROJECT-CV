@@ -12,13 +12,13 @@ FoodSeg103 là benchmark tiêu biểu cho thiết lập ingredient-level này \c
     \caption{Mẫu ảnh đại diện của FoodSeg103, cho thấy độ đa dạng cao về texture, màu sắc và trạng thái bề mặt giữa các nguyên liệu.}
 \end{figure}
 
-Vấn đề nghiên cứu vì thế nằm ở sự đánh đổi giữa độ chính xác và hiệu quả suy luận. Các mô hình segmentation mạnh giàu ngữ cảnh có thể cho kết quả tốt hơn nhưng thường đòi hỏi chi phí tính toán cao, khó triển khai trên thiết bị tài nguyên hạn chế. Ngược lại, các kiến trúc lightweight đạt tốc độ cao nhờ downsample sớm và nén biểu diễn, nhưng chính chiến lược đó có thể làm suy giảm các đặc trưng cục bộ quan trọng đối với ảnh thực phẩm fine-grained. Trong bối cảnh đó, nghiên cứu hiện tại được định vị như một \textbf{baseline study}: thay vì tuyên bố đã giải quyết hoàn chỉnh bài toán texture-aware lightweight segmentation, báo cáo tập trung xây dựng một nền tảng thực nghiệm nhất quán thông qua tái cấu trúc dữ liệu để giảm tác động của long-tail imbalance và chuẩn hóa baseline BiSeNet làm mốc tham chiếu cho các cải tiến texture/local-detail-aware ở giai đoạn tiếp theo.
+Vấn đề nghiên cứu vì thế nằm ở sự đánh đổi giữa độ chính xác và hiệu quả suy luận. Các mô hình segmentation mạnh giàu ngữ cảnh có thể cho kết quả tốt hơn nhưng thường đòi hỏi chi phí tính toán cao, khó triển khai trên thiết bị tài nguyên hạn chế. Ngược lại, các kiến trúc lightweight đạt tốc độ cao nhờ downsample sớm và nén biểu diễn, nhưng chính chiến lược đó có thể làm suy giảm các đặc trưng cục bộ quan trọng đối với ảnh thực phẩm fine-grained. Trong bối cảnh đó, nghiên cứu hiện tại được định vị như một \textbf{baseline study}: thay vì tuyên bố đã giải quyết hoàn chỉnh bài toán texture-aware lightweight segmentation, báo cáo tập trung chuẩn hóa baseline BiSeNet trực tiếp trên FoodSeg103 nguyên thủy làm mốc tham chiếu cho các cải tiến texture/local-detail-aware ở giai đoạn tiếp theo.
 
 Từ định vị đó, báo cáo tập trung vào ba đóng góp chính:
 \begin{itemize}[leftmargin=1.5em]
     \item Phân tích định lượng bộ dữ liệu FoodSeg103 để chỉ ra các khó khăn cốt lõi của bài toán, bao gồm long-tail imbalance, chồng lấp thành phần, ranh giới yếu và chênh lệch độ phân giải giữa các split.
-    \item Xây dựng quy trình làm sạch và tái cấu trúc không gian nhãn dựa trên ngữ nghĩa và tương đồng texture, qua đó giảm số lớp mục tiêu từ 103 xuống 75 trong khi vẫn giữ gần như toàn bộ dữ liệu hợp lệ.
-    \item Thiết lập và chuẩn hóa baseline BiSeNet trên bộ dữ liệu đã xử lý để tạo mốc tham chiếu công bằng cho các nghiên cứu texture-aware lightweight segmentation tiếp theo.
+    \item Thiết lập và chuẩn hóa baseline BiSeNet trên không gian nhãn nguyên thủy 103 lớp để tạo mốc tham chiếu công bằng cho các nghiên cứu texture-aware lightweight segmentation tiếp theo.
+    \item Tổ chức thực nghiệm mở rộng về tái cấu trúc không gian nhãn (103 xuống 75) để phân tích bổ sung ảnh hưởng của phân mảnh nhãn, tách biệt với baseline chính.
 \end{itemize}
 
 \subsection{Phát biểu bài toán}

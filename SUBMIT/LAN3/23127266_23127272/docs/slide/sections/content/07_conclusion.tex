@@ -1,0 +1,31 @@
+% ============================================================
+% VII. KẾT LUẬN
+% ============================================================
+\section{Kết luận}
+
+\begin{frame}{Kết luận: các điểm đã chốt}
+  \begin{block}{Đóng góp đã hoàn thành}
+    \begin{itemize}
+      \item \textbf{Phân tích}: long-tail imbalance, texture confusion, domain gap, boundary yếu trên FoodSeg103
+      \item \textbf{Baseline}: BiSeNet được chuẩn hóa và đánh giá trên \textbf{FoodSeg103 nguyên thủy (103 lớp)}
+      \item \textbf{Mở rộng}: tái cấu trúc nhãn 103 $\to$ 75 được tách thành nhánh thực nghiệm bổ sung
+      \item \textbf{Phân tích lỗi}: xác định sink class, nhầm lẫn có cấu trúc, định vị vùng yếu
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Kết luận: hướng tiếp theo}
+  \begin{alertblock}{Hướng tiếp theo}
+    Kiểm tra hệ thống 3 module đề xuất: \textbf{Texture Branch + Relation GNN + Boundary Supervision} trên \texttt{FoodSeg103} nguyên thủy
+  \end{alertblock}
+  \vspace{0.2em}
+  \begin{block}{Kỳ vọng khi đánh giá vòng sau}
+    \begin{itemize}
+      \item tăng mIoU ở lớp hiếm và lớp có texture tương tự
+      \item giảm hiện tượng sink class trong confusion matrix
+      \item cải thiện chất lượng biên mà vẫn giữ chi phí nhẹ
+    \end{itemize}
+  \end{block}
+
+  \textbf{Mã nguồn:} \url{https://github.com/ariesanhthu/SemanticSegmentation-FoodSeg103}
+\end{frame}

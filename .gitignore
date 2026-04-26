@@ -50,6 +50,7 @@ __pycache__/
 .venv/
 venv/
 env/
+test/
 
 # --- OS / IDE ---
 .DS_Store
