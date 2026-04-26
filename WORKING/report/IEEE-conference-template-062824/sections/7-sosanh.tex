@@ -1,7 +1,5 @@
 \section{So sánh với các baseline khác}
-
 Để đặt kết quả vào bối cảnh chung, Bảng \ref{tab:baseline-comparison} so sánh một số cấu hình baseline phổ biến theo cùng hai chỉ số \texttt{mIoU} và \texttt{mAcc}.
-
 \begin{table}[H]
     \centering
     \caption{So sánh với các baseline segmentation khác.}
@@ -20,12 +18,8 @@
         Xception39 & GNN + BiSeNet (Ours - TestSet + Aug.)$^\ast$ & 768x768 & 16 & 59.9 & 71.7 \\
         \bottomrule
     \end{tabular}}
-    \vspace{0.3em}
-    
     {\footnotesize $^\ast$ Train và test trên tập tăng cường (augmented set).}
 \end{table}
-
-Bên cạnh bảng tổng hợp, Hình~\ref{fig:rtb-best-comparison} trực quan hóa kết quả của RTB/GNN so với CCNet và BiSeNetV1 gốc trên ba chỉ số đánh giá. Mô hình cải tiến cao hơn rõ rệt so với CCNet và BiSeNetV1 (cải tiến nhận diện texture). Đặc biệt, mức tăng từ $31.0\%$ lên $59.9\%$ \texttt{mIoU} cho thấy graph prior và class-relation reasoning là hướng hiệu quả cho bài toán phân đoạn ảnh thực phẩm fine-grained, nơi nhiều lớp nguyên liệu nhỏ, dễ nhầm lẫn và phân bố không cân bằng.
 
 \begin{figure}[H]
     \centering
@@ -33,4 +27,7 @@ Bên cạnh bảng tổng hợp, Hình~\ref{fig:rtb-best-comparison} trực quan
     \caption{So sánh checkpoint tốt nhất của RTB/GNN với CCNet và BiSeNetV1.}
     \label{fig:rtb-best-comparison}
 \end{figure}
+
+Bên cạnh bảng tổng hợp, Hình~\ref{fig:rtb-best-comparison} trực quan hóa kết quả của RTB/GNN so với CCNet và BiSeNetV1 gốc trên ba chỉ số đánh giá. Mô hình cải tiến cao hơn rõ rệt so với CCNet và BiSeNetV1 (cải tiến nhận diện texture). Đặc biệt, mức tăng từ $31.0\%$ lên $59.9\%$ \texttt{mIoU} cho thấy graph prior và class-relation reasoning là hướng hiệu quả cho bài toán phân đoạn ảnh thực phẩm fine-grained, nơi nhiều lớp nguyên liệu nhỏ, dễ nhầm lẫn và phân bố không cân bằng.
+
 

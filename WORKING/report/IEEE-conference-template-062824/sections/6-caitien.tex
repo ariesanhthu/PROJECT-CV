@@ -184,11 +184,13 @@ Hình~\ref{fig:rtb-training-curves} cho thấy mô hình RTB/GNN hội tụ ổn
     \label{fig:rtb-training-curves}
 \end{figure}
 
-Hình~\ref{fig:rtb-presence-error} phân tích lỗi hiện diện lớp tại các checkpoint tiêu biểu. Ở epoch 0, mô hình gần như chưa nhận diện đúng sự hiện diện lớp, với FP $88.9\%$ và accuracy chỉ $3.7\%$. Tại checkpoint có \texttt{mIoU} tốt nhất, TP tăng lên $87.5\%$ và FN còn $12.5\%$; đặc biệt, checkpoint tốt nhất theo presence đạt $100\%$ TP. Kết quả này cho thấy graph reasoning giúp mô hình học tốt hơn quan hệ xuất hiện lớp trong ảnh, từ đó giảm dự đoán lan sang các lớp không có mặt.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{img/caitien/plot/presence error.png}
     \caption{Phân tích lỗi hiện diện lớp của mô hình RTB/GNN tại các checkpoint tiêu biểu.}
     \label{fig:rtb-presence-error}
 \end{figure}
+
+Hình~\ref{fig:rtb-presence-error} phân tích lỗi hiện diện lớp tại các checkpoint tiêu biểu. Ở epoch 0, mô hình gần như chưa nhận diện đúng sự hiện diện lớp, với FP $88.9\%$ và accuracy chỉ $3.7\%$. Tại checkpoint có \texttt{mIoU} tốt nhất, TP tăng lên $87.5\%$ và FN còn $12.5\%$; đặc biệt, checkpoint tốt nhất theo presence đạt $100\%$ TP. Kết quả này cho thấy graph reasoning giúp mô hình học tốt hơn quan hệ xuất hiện lớp trong ảnh, từ đó giảm dự đoán lan sang các lớp không có mặt.
+
 
