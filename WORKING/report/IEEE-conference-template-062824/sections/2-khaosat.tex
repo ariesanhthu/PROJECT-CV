@@ -4,14 +4,6 @@ Các nghiên cứu liên quan chỉ tập trung vào ba câu hỏi trực tiếp
 
 \subsection{Fine-grained food segmentation và benchmark FoodSeg103}
 
-Phân đoạn ảnh thực phẩm ở mức nguyên liệu khó hơn rõ rệt so với semantic segmentation tổng quát vì nhiều lớp có hình dạng tổng thể gần nhau nhưng khác nhau ở texture, trạng thái bề mặt và chất lượng biên \cite{benchmarkfood}. Trong cùng một ảnh, các nguyên liệu thường chồng lấp, bị che khuất một phần và có ranh giới yếu sau chế biến. Vì vậy, local detail đóng vai trò trực tiếp trong việc phân biệt lớp, thay vì chỉ là tín hiệu bổ trợ.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{img/foodseg103.png}
-    \caption{Mẫu ảnh đại diện của FoodSeg103, cho thấy độ đa dạng cao về texture, màu sắc và trạng thái bề mặt giữa các nguyên liệu.}
-\end{figure}
-
 FoodSeg103 là benchmark ingredient-level tiêu biểu cho bài toán này \cite{benchmarkfood}. Bộ dữ liệu gồm 7{,}118 ảnh, 103 lớp nguyên liệu và 42{,}097 mask; trong đó tập huấn luyện có 4{,}983 ảnh và tập đánh giá có 2{,}135 ảnh. Kết quả benchmark ban đầu cho thấy DeepLabv3+ chỉ đạt 34.2 mIoU trên FoodSeg103, thấp hơn đáng kể so với khi đánh giá trên các bộ dữ liệu food segmentation đơn giản hơn \cite{benchmarkfood}. Điều đó cho thấy khó khăn chính không nằm ở việc nhận diện món ăn nói chung, mà ở khả năng tách chính xác từng nguyên liệu có tín hiệu phân biệt rất mịn.
 
 Nhóm công trình này làm tốt ở chỗ xác lập một benchmark thực sự khó và chỉ ra vai trò của semantic prior, ví dụ ReLeM giúp SeTR tăng từ 41.3 lên 43.9 mIoU \cite{benchmarkfood}. Tuy nhiên, các hướng mạnh về biểu diễn hoặc tri thức đa phương thức vẫn chưa giải quyết trực tiếp bài toán triển khai nhẹ. Vì vậy, giá trị lớn nhất của nhánh này đối với đề tài hiện tại là làm rõ rằng FoodSeg103 đòi hỏi mô hình phải nhạy với texture, boundary và class imbalance, chứ không chỉ mạnh về ngữ cảnh toàn cục.

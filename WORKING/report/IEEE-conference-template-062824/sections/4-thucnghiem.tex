@@ -55,6 +55,21 @@ Hình \ref{fig:bisenet-train-val-loss} và Hình \ref{fig:bisenet-val-metrics} t
 \end{figure}
 
 
+Hình \ref{fig:bisenet-output-samples} minh họa một số kết quả dự đoán của mô hình cơ sở trên tập kiểm định. Nhìn chung, BiSeNet có thể tái tạo tương đối tốt cấu trúc tổng thể của món ăn và nhận diện được các vùng nguyên liệu lớn, nhưng vẫn xuất hiện sai lệch ở các vùng biên mỏng hoặc các thành phần có texture gần nhau. Một ví dụ lỗi điển hình được trình bày ở Hình \ref{fig:bisenet-predict-problem}, trong đó mô hình dự đoán sai đáng kể ở các vùng nguyên liệu chồng lấp và có màu sắc tương tự.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/outputs/output-sample.png}
+    \caption{Một số ví dụ dự đoán của BiSeNet trên tập kiểm định, gồm ảnh gốc, ground truth overlay và prediction overlay.}
+    \label{fig:bisenet-output-samples}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{img/outputs/predict-problem.jpg}
+    \caption{Ví dụ lỗi dự đoán điển hình của BiSeNet khi các thành phần nguyên liệu có ranh giới mờ hoặc chồng lấp mạnh.}
+    \label{fig:bisenet-predict-problem}
+\end{figure}
 
 % Bảng 2: Kết quả đánh giá tổng thể
 \begin{table}[H]
@@ -74,3 +89,4 @@ Hình \ref{fig:bisenet-train-val-loss} và Hình \ref{fig:bisenet-val-metrics} t
 \end{table}
 
 Theo tiêu chí đã định nghĩa ở phần trước, \textbf{mIoU} vẫn là chỉ số đánh giá chính vì phản ánh trực tiếp mức giao nhau trên hợp giữa vùng dự đoán và ground truth ở cấp độ pixel. Kết quả trên tập kiểm định cho thấy mô hình đạt $\mathrm{mIoU}=0.35$, $\mathrm{mAcc}=0.41$ và $\mathrm{aAcc}=0.79$. So sánh tương quan giữa ba chỉ số cho thấy độ chính xác toàn cục vẫn cao hơn đáng kể so với các chỉ số trung bình theo lớp, phản ánh tác động của mất cân bằng lớp trong dữ liệu phân đoạn thực phẩm và dư địa cải thiện ở các lớp khó/hiếm.
+
