@@ -16,7 +16,7 @@
 
 \begin{frame}{Kết luận: hướng tiếp theo}
   \begin{alertblock}{Hướng tiếp theo}
-    Kiểm tra hệ thống 3 module đề xuất: \textbf{Texture Branch + Relation GNN + Boundary Supervision} trên \texttt{FoodSeg103} nguyên thủy
+    Kiểm tra hệ thống 3 module đề xuất: \textbf{Texture Branch + Relation GNN + Boundary Supervision} trên \texttt{FoodSeg103} nguyên thủy, đồng thời mở rộng theo hướng \textbf{Curriculum Learning}
   \end{alertblock}
   \vspace{0.2em}
   \begin{block}{Kỳ vọng khi đánh giá vòng sau}
@@ -24,6 +24,7 @@
       \item tăng mIoU ở lớp hiếm và lớp có texture tương tự
       \item giảm hiện tượng sink class trong confusion matrix
       \item cải thiện chất lượng biên mà vẫn giữ chi phí nhẹ
+      \item kiểm chứng hiệu xuất của curriculum/self-paced learning cho tập dữ liệu mất cân bằng Foodseg 103.
     \end{itemize}
   \end{block}
 
