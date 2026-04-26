@@ -8,17 +8,17 @@
     \column{0.49\textwidth}
       \textbf{II-A. FoodSeg103 \& fine-grained segmentation}
       \begin{itemize}
-        \item 7.118 ảnh, 103 lớp, 42.097 mask
-        \item DeepLabv3+ chỉ đạt \textbf{34.2 mIoU}
-        \item ReLeM giúp SeTR tăng 41.3 $\to$ 43.9 mIoU
+        \item 7.118 ảnh, 103 lớp, 42.097 mask \cite{benchmarkfood}
+        \item DeepLabv3+ chỉ đạt \textbf{34.2 mIoU} trên benchmark này \cite{benchmarkfood,chen2017deeplab}
+        \item ReLeM giúp SeTR tăng 41.3 $\to$ 43.9 mIoU \cite{benchmarkfood,zheng2021setr}
         \item Yêu cầu: nhạy với texture, boundary, class imbalance
       \end{itemize}
       \column{0.50\textwidth}
       \textbf{II-B. Lightweight segmentation}
       \begin{itemize}
-        \item BiSeNet: 68.4\% mIoU @ 105 FPS
-        \item Fast-SCNN: 68.0\% @ 123.5 FPS, 1.11M params
-        \item PIDNet-S: 78.6\% @ 93.2 FPS
+        \item BiSeNet: 68.4\% mIoU @ 105 FPS \cite{bisenet}
+        \item Fast-SCNN: 68.0\% @ 123.5 FPS, 1.11M params \cite{poudel2019fastscnn}
+        \item PIDNet-S: 78.6\% @ 93.2 FPS \cite{xu2023pidnet}
       \end{itemize}
     
 
@@ -36,10 +36,10 @@
     \column{0.52\textwidth}
       \textbf{II-C. Cơ chế tăng cường local detail}
       \begin{itemize}
-        \item Gated-SCNN: shape stream riêng
-        \item PIDNet: 3 nhánh detail--context--boundary
-        \item PointRend: tinh chỉnh tại điểm bất định
-        \item Deep-TEN: texture như tín hiệu thống kê
+        \item Gated-SCNN: shape stream riêng \cite{takikawa2019gatedscnn}
+        \item PIDNet: 3 nhánh detail--context--boundary \cite{xu2023pidnet}
+        \item PointRend: tinh chỉnh tại điểm bất định \cite{kirillov2020pointrend}
+        \item Deep-TEN: texture như tín hiệu thống kê \cite{zhang2017deepten}
       \end{itemize}
 
         Các hướng trên đều thêm tín hiệu \textbf{hình học cục bộ} hoặc \textbf{texture} vào pipeline segmentation.

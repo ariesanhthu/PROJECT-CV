@@ -3059,7 +3059,27 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">ref/ref.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1" intorder="1">bisenet</bcf:citekey>
+    <bcf:citekey order="1" intorder="1">mahalik2010trends</bcf:citekey>
+    <bcf:citekey order="1" intorder="2">stemmer2018vision</bcf:citekey>
+    <bcf:citekey order="2" intorder="1">gao2019smartfridge</bcf:citekey>
+    <bcf:citekey order="2" intorder="2">wang2019smartrefrigerator</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">benchmarkfood</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">benchmarkfood</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">benchmarkfood</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">benchmarkfood</bcf:citekey>
+    <bcf:citekey order="6" intorder="2">chen2017deeplab</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">benchmarkfood</bcf:citekey>
+    <bcf:citekey order="7" intorder="2">zheng2021setr</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">bisenet</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">poudel2019fastscnn</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">xu2023pidnet</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">takikawa2019gatedscnn</bcf:citekey>
+    <bcf:citekey order="12" intorder="1">xu2023pidnet</bcf:citekey>
+    <bcf:citekey order="13" intorder="1">kirillov2020pointrend</bcf:citekey>
+    <bcf:citekey order="14" intorder="1">zhang2017deepten</bcf:citekey>
+    <bcf:citekey order="15" intorder="1">bisenet</bcf:citekey>
+    <bcf:citekey order="16" intorder="1">haralick1973</bcf:citekey>
+    <bcf:citekey order="17" intorder="1">benchmarkfood</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="apa">
