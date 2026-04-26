@@ -39,7 +39,7 @@
       \toprule
       \textbf{mIoU} & \textbf{mAcc} & \textbf{aAcc} \\
       \midrule
-      0.31 & 0.41 & 0.79 \\
+      31.0\% & 35.8\% & 71.9\% \\
       \bottomrule
     \end{tabular}
   \end{center}
@@ -59,7 +59,7 @@
         \includegraphics[width=\linewidth]{img/report/outputs/predict-problem.jpg}
         \caption{Lỗi điển hình: ranh giới mờ, chồng lấp mạnh}
       \end{figure}
-      \small aAcc cao (0.79) nhưng mIoU thấp (0.31) $\to$ mô hình tốt ở vùng lớn, yếu ở vùng nhỏ và biên
+      \small aAcc cao nhưng mIoU thấp $\to$ mô hình tốt ở vùng lớn, yếu ở vùng nhỏ và biên
   \end{columns}
 \end{frame}
 
@@ -73,7 +73,6 @@
       \end{figure}
     \column{0.49\textwidth}
       \begin{itemize}
-        \item Pixel acc $0.3$--$0.6$ nhưng mIoU vẫn $<0.3$
         \item Pixel acc không nhạy với lỗi lớp nhỏ và vùng biên
         \item mIoU phạt đồng thời $FP$ và $FN$
         \item Điểm yếu: \textbf{định vị} sai vùng nguyên liệu, không chỉ nhận diện sai lớp
@@ -100,17 +99,24 @@
 \end{frame}
 
 \begin{frame}{IV-C. Nhận xét lỗi có cấu trúc}
-  \begin{alertblock}{Hiện tượng Sink Class}
-    \textbf{chicken duck} chiếm $\approx$458M pixel False Positive. Các lớp tương đồng về vân như (58.5\%), pork (57.9\%), bread (56.2\%), steak (55.6\%) đều bị dự đoán sai thành lớp trên.
-  \end{alertblock}
-  \vspace{0.3em}
-  \textbf{Nhầm lẫn dựa trên đặc điểm thị giác}
-  \begin{itemize}
-    \item rice $\leftrightarrow$ potato (21.9\% / 20.1\%)
-    \item steak $\to$ sausage (27.0\%), broccoli $\to$ sausage (27.6\%)
-  \end{itemize}
-  \vspace{0.3em}
-  \begin{block}{Kết luận}
-    Lỗi \textbf{không ngẫu nhiên}: do tương đồng về vân và quan hệ tương đồng xuất hiện. Spatial Path chưa đủ để phân biệt fine-grained texture.
-  \end{block}
+  \begin{columns}[T,onlytextwidth]
+    \column[t]{0.48\textwidth}
+      \scriptsize
+      \begin{alertblock}{Hiện tượng Sink Class}
+        \textbf{chicken duck} chiếm $\approx$458M pixel False Positive; các lớp giàu texture tương tự như fish (58.5\%), pork (57.9\%), bread (56.2\%), steak (55.6\%) dễ bị hút về lớp này.
+      \end{alertblock}
+      \vspace{0.1em}
+      \textbf{Nhầm lẫn dựa trên đặc điểm thị giác}
+      \begin{itemize}
+        \item rice $\leftrightarrow$ potato (21.9\% / 20.1\%)
+        \item steak $\to$ sausage (27.0\%), broccoli $\to$ sausage (27.6\%)
+        \item \textbf{Kết luận:} lỗi có cấu trúc, Spatial Path chưa đủ tách fine-grained texture
+      \end{itemize}
+    \column[t]{0.50\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{img/report/analyze/top_hard_pair_gallery.png}
+        \caption{\scriptsize Minh họa cặp nhầm lẫn khó: chicken duck vs fish}
+      \end{figure}
+  \end{columns}
 \end{frame}

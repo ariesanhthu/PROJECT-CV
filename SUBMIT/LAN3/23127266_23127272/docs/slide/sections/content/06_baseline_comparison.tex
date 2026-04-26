@@ -5,6 +5,8 @@
 
 \begin{frame}{So sánh với các baseline khác}
   \begin{table}
+    \small
+    \setlength{\tabcolsep}{4pt}
     \begin{tabular}{llllrr}
       \toprule
       \textbf{Encoder} & \textbf{Decoder} & \textbf{Crop} & \textbf{BS} & \textbf{mIoU} & \textbf{mAcc} \\
@@ -13,13 +15,28 @@
       ReLeM-R-50 & CCNet & 512$\times$1024 & 8 & 36.8 & 47.4 \\
       ViT-16/B   & MLA   & 768$\times$768  & 4 & 45.1 & 57.4 \\
       \midrule
-      \textbf{BiSeNet (ours)} & \textbf{---} & \textbf{512$\times$512} & \textbf{8} & \textbf{31.0} & \textbf{41.0} \\
+      \textbf{Xception39} & \shortstack[l]{\textbf{GNN + BiSeNet}\\(Ours - TestSet)} & \textbf{768$\times$768} & \textbf{8} & \textbf{47.97} & \textbf{57.51} \\
+      \textbf{Xception39} & \shortstack[l]{\textbf{GNN + BiSeNet}\\(Ours - TestSet + Aug*)}\textsuperscript{*} & \textbf{768$\times$768} & \textbf{16} & \textbf{59.9} & \textbf{71.7} \\
       \bottomrule
     \end{tabular}
     \caption{So sánh baseline trên FoodSeg103}
   \end{table}
+  \vspace{-0.4em}
+  {\tiny $^\ast$ Train và test trên tập tăng cường (augmented set).}
   \vspace{0.3em}
   \begin{block}{Nhận xét}
     BiSeNet nhẹ hơn đáng kể so với các mô hình đối chứng; trong báo cáo này baseline được thiết lập trực tiếp trên \texttt{FoodSeg103} nguyên thủy (103 lớp), thể hiện trade-off giữa hiệu quả và độ chính xác dưới ràng buộc lightweight
+  \end{block}
+\end{frame}
+
+\begin{frame}{Mức cải thiện so với baseline}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.6\linewidth]{img/report/caitien/plot/best-comparison-metric.png}
+    \caption{So sánh chỉ số với baseline}
+  \end{figure}
+  % \vspace{-0.2em}
+  \begin{block}{Vì sao mIoU và mAcc tăng đáng kể?}
+    So với cấu hình \textbf{Xception39 + GNN + BiSeNet (TestSet)} đạt \textbf{47.97 mIoU / 57.51 mAcc}, phiên bản \textbf{TestSet + Aug.} đạt \textbf{59.9 mIoU / 71.7 mAcc} nhờ kết hợp các cải tiến trong \texttt{6-caitien.tex}: \textit{Texture-aware Branch} tăng phân biệt lớp có texture gần nhau, \textit{Relation GNN} giảm nhầm lẫn có cấu trúc qua prior đồng xuất hiện/tiếp xúc, và \textit{Boundary-aware Supervision} cải thiện vùng biên.
   \end{block}
 \end{frame}

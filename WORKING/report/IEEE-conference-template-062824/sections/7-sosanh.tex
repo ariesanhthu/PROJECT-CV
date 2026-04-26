@@ -10,13 +10,27 @@
     \resizebox{\columnwidth}{!}{%
     \begin{tabular}{llllrr}
         \toprule
-        \textbf{Encoder} & \textbf{Decoder} & \textbf{Crop Size} & \textbf{Batch Size} & \textbf{mIoU} & \textbf{mAcc} \\
+        \textbf{Backbone} & \textbf{Method} & \textbf{Crop Size} & \textbf{Batch Size} & \textbf{mIoU} & \textbf{mAcc} \\
         \midrule
         R-50 & CCNet & 512x1024 & 8 & 35.5 & 45.3 \\
         ReLeM-R-50 & CCNet & 512x1024 & 8 & 36.8 & 47.4 \\
         ViT-16/B & MLA & 768x768 & 4 & 45.1 & 57.4 \\
+        \midrule
+        Xception39 & GNN + BiSeNet (Ours - TestSet) & 768x768 & 8 & 47.97 & 57.51 \\
+        Xception39 & GNN + BiSeNet (Ours - TestSet + Aug.)$^\ast$ & 768x768 & 16 & 59.9 & 71.7 \\
         \bottomrule
     \end{tabular}}
+    \vspace{0.3em}
+    
+    {\footnotesize $^\ast$ Train và test trên tập tăng cường (augmented set).}
 \end{table}
 
+Bên cạnh bảng tổng hợp, Hình~\ref{fig:rtb-best-comparison} trực quan hóa kết quả của RTB/GNN so với CCNet và BiSeNetV1 gốc trên ba chỉ số đánh giá. Mô hình cải tiến cao hơn rõ rệt so với CCNet và BiSeNetV1 (cải tiến nhận diện texture). Đặc biệt, mức tăng từ $31.0\%$ lên $59.9\%$ \texttt{mIoU} cho thấy graph prior và class-relation reasoning là hướng hiệu quả cho bài toán phân đoạn ảnh thực phẩm fine-grained, nơi nhiều lớp nguyên liệu nhỏ, dễ nhầm lẫn và phân bố không cân bằng.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{img/caitien/plot/best-comparison-metric.png}
+    \caption{So sánh checkpoint tốt nhất của RTB/GNN với CCNet và BiSeNetV1.}
+    \label{fig:rtb-best-comparison}
+\end{figure}
 

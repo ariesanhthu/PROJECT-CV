@@ -38,7 +38,7 @@ Về mặt IoU, sink class gây lỗi kép: lớp nguồn tăng $FN$ vì pixel t
 
 \subsubsection{Phân tích ma trận nhầm lẫn}
 
-\begin{figure}[t]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{img/analyze/eval-model/04_top_confusion_directions_improved.png}
     \caption{Ma trận nhầm lẫn của các lớp bị nhầm nhiều nhất, chuẩn hóa theo hàng theo phần trăm pixel ground truth.}
@@ -46,6 +46,13 @@ Về mặt IoU, sink class gây lỗi kép: lớp nguồn tăng $FN$ vì pixel t
 \end{figure}
 
 Hình~\ref{fig:confusion_matrix} cho thấy các lỗi nhầm lẫn của baseline có cấu trúc rõ ràng. Nhiều lớp bị dự đoán mạnh sang \textit{chicken duck}, ví dụ \textit{pie} ($58.5\%$), \textit{pork} ($57.9\%$), \textit{bread} ($56.2\%$), \textit{steak} ($55.6\%$), \textit{sausage} ($53.6\%$) và \textit{cake} ($52.5\%$). Ngay cả \textit{background} cũng có $32.0\%$ pixel bị dự đoán thành \textit{chicken duck}, tương ứng khoảng $188.3$ triệu pixel.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{img/analyze/top_hard_pair_gallery.png}
+    \caption{Top hard pair gallery: các patch mẫu của cặp nhầm lẫn khó \textit{chicken duck} và \textit{fish}.}
+    \label{fig:top_hard_pair_gallery}
+\end{figure}
 
 Ngoài lỗi hút về một lớp trung tâm, ma trận còn cho thấy các cặp nhầm lẫn có ý nghĩa thị giác hoặc ngữ cảnh. Ví dụ, \textit{rice} bị nhầm sang \textit{potato} ($21.9\%$), và \textit{potato} bị nhầm sang \textit{rice} ($20.1\%$). Các lớp có bề mặt hoặc màu sắc gần nhau cũng bị nhầm đáng kể, như \textit{steak} $\rightarrow$ \textit{sausage} ($27.0\%$), \textit{broccoli} $\rightarrow$ \textit{sausage} ($27.6\%$), và \textit{sauce} $\rightarrow$ \textit{sausage} ($14.2\%$).
 
